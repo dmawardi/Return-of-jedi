@@ -1,3 +1,16 @@
 .list-group-item {
   line-height: 2.5;
 }
+
+/* CSS for canvas that draws boxes on faces during facial recognition */
+canvas {
+  box-sizing: content-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* CSS for input button */
+input [type=file] {
+  box-sizing: border-box;
+}

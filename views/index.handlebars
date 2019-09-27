@@ -4,6 +4,13 @@
       <div class="col-8 offset-2">
         <h1>{{msg}}</h1>
         <h2>This is our Home Page!</h2>
+        <input type="file" id="imageUpload">
+        {{!-- Video section --}}
+        <div class="container" id="capture">
+        <video id="video" width="720" height="560" autoplay muted></video>
+        </div>
+
+
         <form class="clearfix mb-4" action="POST">
           <div class="form-group">
             <label for="example-text">Example Text</label>
@@ -31,3 +38,5 @@
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="/js/index.js"></script>
+<script src="/js/face-api.min.js"></script>
+<script src="/js/faceRecognition.js"></script>
