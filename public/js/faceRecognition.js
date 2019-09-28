@@ -1,5 +1,7 @@
 // import { json } from "sequelize/types";
 
+// import { json } from "sequelize/types";
+
 // import { image } from "@tensorflow/tfjs-core";
 
 var video = document.querySelector('video');
@@ -89,7 +91,7 @@ $('#video').on('play', function () {
         //   })
 
         // Every 1 millisecond
-    }, 3000);
+    }, 1000);
 });
 
 $('#checkInButton').on('click', function () {
@@ -107,27 +109,35 @@ $('#checkInButton').on('click', function () {
     const leftEyeBbrow = faceToStore.landmarks.getLeftEyeBrow()
     const rightEyeBrow = faceToStore.landmarks.getRightEyeBrow()
 
-    console.log('jaw', jawOutline);
-
     // Print face detection
     console.log(faceToStore);
+    // var faceObject = {
+    //     name: 'Bill',
+    //     jawOutline: JSON.stringify(jawOutline),
+    //     nose: JSON.stringify(nose),
+    //     mouth: JSON.stringify(mouth),
+    //     leftEye: JSON.stringify(leftEye),
+    //     rightEye: JSON.stringify(rightEye),
+    //     leftEyeBbrow: JSON.stringify(leftEyeBbrow),
+    //     rightEyeBrow: JSON.stringify(rightEyeBrow)
+    // }
+
     var faceObject = {
-        name: 'Bill',
-        jawOutline: JSON.stringify(jawOutline),
-        nose: JSON.stringify(nose),
-        mouth: JSON.stringify(mouth),
-        leftEye: JSON.stringify(leftEye),
-        rightEye: JSON.stringify(rightEye),
-        leftEyeBbrow: JSON.stringify(leftEyeBbrow),
-        rightEyeBrow: JSON.stringify(rightEyeBrow)
+        name: "Bill",
+        descriptors: JSON.parse(JSON.stringify(faceToStore.landmarks._positions))
     }
     console.log(faceObject);
 
-
-
-    $.post("api/addNewFace", faceObject, function (data) {
+    $.ajax({
+        method: 'POST',
+        url: 'api/addNewFace',
+        data: JSON.stringify(faceObject),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(data => {
         console.log(data);
-    });
+    })
 
 });
 

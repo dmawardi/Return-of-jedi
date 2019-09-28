@@ -32,30 +32,33 @@ module.exports = function (app) {
   });
 
   // API Routes for face recognition
-  // API route for getting data
-  app.get("/api/getCompanyFaceData", function (req, res) {
+  // API route for getting user's face model
+  app.get("/api/getCompanyFaceData", function(req, res) {
     var fs = require("fs");
     var path = require("path");
     console.log("reading file");
     // Read data file
-    fs.readFile(path.join(__dirname, "../public/js/appmodels/facedb.txt"), 'utf8', function (err, data) {
+
+    // Grab user's data
+    fs.readFile(path.join(__dirname, "../faceDB/facedb.txt"), 'utf8', function (err, data) {
       if (err) {
-        console.log(err);
+        throw err;
       }
       // Print and return to user
-      console.log(data);
-      res.send(data);
+      var faceToMatch = data;
+      console.log(faceToMatch);
+      res.send(faceToMatch);
     });
 
   });
 
   // Create a new example
-  app.post("/api/addNewFace", function(req, res) {
+  app.post("/api/addNewFace", function (req, res) {
     console.log("someone is sending a post");
-    // console.log(req.body);
-    var facialModel = extractNewFace(req.body);
+    console.log(req.body);
+    var facialModel = req.body;
     console.log(facialModel);
-    fs.writeFile("faceDB/facedb.txt", JSON.stringify(facialModel), function(error){
+    fs.writeFile("faceDB/facedb.txt", JSON.stringify(facialModel), function(error) {
       if (error) throw error;
       console.log("File save");
     });
