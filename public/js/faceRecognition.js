@@ -1,3 +1,5 @@
+// import { json } from "sequelize/types";
+
 // import { image } from "@tensorflow/tfjs-core";
 
 var video = document.querySelector('video');
@@ -62,9 +64,6 @@ $('#video').on('play', function () {
             }
         }
 
-        const json = await faceapi.fetchJson('/files/example.json');
-        console.log(json);
-
 
 
         // Make boxes properly sized for video
@@ -95,7 +94,7 @@ $('#video').on('play', function () {
 
 $('#checkInButton').on('click', function () {
     var faceToStore = storeFace;
-    console.log(storeFace);
+    console.log(JSON.stringify(faceToStore.landmarks._positions));
     console.log(faceToStore);
 
 
@@ -114,13 +113,13 @@ $('#checkInButton').on('click', function () {
     console.log(faceToStore);
     var faceObject = {
         name: 'Bill',
-        jawOutline: jawOutline,
-        nose: nose,
-        mouth: mouth,
-        leftEye: leftEye,
-        rightEye: rightEye,
-        leftEyeBbrow: leftEyeBbrow,
-        rightEyeBrow: rightEyeBrow
+        jawOutline: JSON.stringify(jawOutline),
+        nose: JSON.stringify(nose),
+        mouth: JSON.stringify(mouth),
+        leftEye: JSON.stringify(leftEye),
+        rightEye: JSON.stringify(rightEye),
+        leftEyeBbrow: JSON.stringify(leftEyeBbrow),
+        rightEyeBrow: JSON.stringify(rightEyeBrow)
     }
     console.log(faceObject);
 

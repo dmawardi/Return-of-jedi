@@ -1,4 +1,5 @@
 var db = require("../models");
+var fs = require('fs');
 
 module.exports = function (app) {
   // Get all examples
@@ -32,7 +33,7 @@ module.exports = function (app) {
 
   // API Routes for face recognition
   // API route for getting data
-  app.get("/api/getCompanyFaceData", function(req, res) {
+  app.get("/api/getCompanyFaceData", function (req, res) {
     var fs = require("fs");
     var path = require("path");
     console.log("reading file");
@@ -50,10 +51,28 @@ module.exports = function (app) {
 
   // Create a new example
   app.post("/api/addNewFace", function(req, res) {
-    console.log('someone is sending a post');
-    console.log(req.body);
+    console.log("someone is sending a post");
+    // console.log(req.body);
+    var facialModel = extractNewFace(req.body);
+    console.log(facialModel);
+    fs.writeFile("faceDB/facedb.txt", JSON.stringify(facialModel), function(error){
+      if (error) throw error;
+      console.log("File save");
+    });
     res.json(req.body);
   });
 
-
+  function extractNewFace(data) {
+    var faceObject = {
+      name: data.name,
+      jawOutline: JSON.parse(data.jawOutline),
+      nose: JSON.parse(data.nose),
+      mouth: JSON.parse(data.mouth),
+      leftEye: JSON.parse(data.leftEye),
+      rightEye: JSON.parse(data.rightEye),
+      leftEyeBbrow: JSON.parse(data.leftEyeBbrow),
+      rightEyeBrow: JSON.parse(data.rightEyeBrow)
+    };
+    return faceObject;
+  }
 };
