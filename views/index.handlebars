@@ -1,33 +1,84 @@
-<div id="home">
-  <div class="container">
-    <div class="row">
-      <div class="col-8 offset-2">
-        <h1>{{msg}}</h1>
-        <h2>This is our Home Page!</h2>
-        <form class="clearfix mb-4" action="POST">
-          <div class="form-group">
-            <label for="example-text">Example Text</label>
-            <input type="text" id="example-text" class="form-control" aria-describedby="example-text" placeholder="Enter Example Text">
-          </div>
-          <div class="form-group">
-            <label for="example-description">Example Description</label>
-            <textarea class="form-control" id="example-description" aria-describedby="example-description" placeholder="Enter Example Description"></textarea>
-          </div>
-          <button id="submit" class="btn btn-primary float-right">Submit</button>
-        </form>
-        <h3>Examples:</h3>
-        <ul id="example-list" class="list-group">
-          {{#each examples}}
-          <li data-id="{{this.id}}" class="list-group-item">
-            <a href="example/{{this.id}}">{{this.text}}</a>
-            <button class="btn btn-danger float-right delete">ｘ</button>
-          </li>
-          {{/each}}
-        </ul>
+<div id="wrapper">
+
+  <!-- Header -->
+  <header id="header">
+    <div class="logo">
+      <span class="icon fa-gem"></span>
+    </div>
+    <div class="content">
+      <div class="inner">
+        <h1>Project Name</h1>
+        <p>A fully responsive site template designed by <a href="https://html5up.net">HTML5 UP</a> and released<br />
+          for free under the <a href="https://html5up.net/license">Creative Commons</a> license.</p>
       </div>
     </div>
-  </div>
-</div>
+    <nav>
+      <ul>
+        <li><a href="#login">Login</a></li>
+        <li><a href="#register">Register</a></li>
+      </ul>
+    </nav>
+  </header>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="/js/index.js"></script>
+  <!-- Main -->
+  <div id="main">
+
+    <!-- Login -->
+    <article id="login">
+      <h2 class="major">Login</h2>
+      <form method="post" action="#">
+        <div class="fields">
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="text" name="password" id="password" />
+          </div>
+        </div>
+        <ul class="actions">
+          <li><input type="submit" value="Login" class="primary" /></li>
+          <li><input type="reset" value="Reset" /></li>
+        </ul>
+      </form>
+    </article>
+
+
+    <!-- Register -->
+    <article id="register">
+      <h2 class="major">Register</h2>
+      <form method="post" action="#">
+        <div class="fields">
+          <div class="field half">
+            <label for="cname">Comapny Name</label>
+            <input type="text" name="cname" id="cname" />
+          </div>
+          <div class="field half">
+            <label for="clogo">Company logo</label>
+            <input type="file" name="pic" accept="image/*">
+          </div>
+          <div class="field half">
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" />
+          </div>
+          <div class="field half">
+            <label for="password">Password</label>
+            <input type="text" name="password" id="password" />
+          </div>
+        </div>
+        <ul class="actions">
+          <li><input type="submit" value="Register" class="primary" /></li>
+          <li><input type="reset" value="Reset" /></li>
+        </ul>
+      </form>
+    </article>
+
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <p class="copyright">&copy; Untitled. Design: <a href="#">JEDI</a>.</p>
+  </footer>
+
+</div>

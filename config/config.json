@@ -1,15 +1,17 @@
 {
   "development": {
     "username": "root",
-    "password": null,
-    "database": "exampledb",
+    "password": "root",
+    "port": 8889,
+    "database": "facecheckin",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": null,
-    "database": "testdb",
+    "password": "root",
+    "port": 8889,
+    "database": "facecheckin",
     "host": "localhost",
     "dialect": "mysql",
     "logging": false
