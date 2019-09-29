@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 module.exports = function(sequelize, DataTypes) {
   var TimeSheet = sequelize.define("TimeSheet", {
-    timestamp: {
-      type: DataTypes.STRING,
+    employeeID: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         len: [1]
@@ -18,12 +18,12 @@ module.exports = function(sequelize, DataTypes) {
     geoLocation: {
       type: DataTypes.GEOMETRY("POINT")
     },
-    created_at: {
+    check_in: {
       type: "TIMESTAMP",
       //   defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
       allowNull: false
     },
-    updated_at: {
+    check_out: {
       type: "TIMESTAMP",
       //   defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
       allowNull: false
