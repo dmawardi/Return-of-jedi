@@ -1,0 +1,22 @@
+      {{> navbar}}
+
+<form class="form-signin" action="/api/login" method="POST">
+  <h2 class="form-signin-heading">Please sign in</h2>
+ 
+  <label for="email" class="sr-only">Email address</label>
+  <input type="email" id="email" name="email" class="form-control" placeholder="Email address" required autofocus>
+ 
+  <label for="password" class="sr-only">Password</label>
+  <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+ 
+  <br/>
+   
+  <button id="employerSignIn" class="btn btn-lg btn-default btn-block" type="submit">Sign in</button>
+</form>
+
+{{result}}
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
