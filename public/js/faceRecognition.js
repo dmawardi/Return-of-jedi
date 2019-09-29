@@ -52,7 +52,7 @@ $('#video').on('play', function () {
     setInterval(async function () {
 
         var detections = await faceapi.detectAllFaces(video,
-            new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+            new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions().withFaceDescriptors();
 
         console.log(detections);
 
@@ -95,9 +95,10 @@ $('#video').on('play', function () {
 });
 
 $('#checkInButton').on('click', function () {
+    // Grab stored face and store in separate variable for sending
     var faceToStore = storeFace;
-    console.log(JSON.stringify(faceToStore.landmarks._positions));
-    console.log(faceToStore);
+    // console.log(JSON.stringify(faceToStore.landmarks._positions));
+    console.log("facetostore: "+faceToStore);
 
 
     // Split data into separate points if required and able to be read back in
@@ -110,7 +111,7 @@ $('#checkInButton').on('click', function () {
     const rightEyeBrow = faceToStore.landmarks.getRightEyeBrow()
 
     // Print face detection
-    console.log(faceToStore);
+    console.log("facetostore: ",faceToStore);
     // var faceObject = {
     //     name: 'Bill',
     //     jawOutline: JSON.stringify(jawOutline),
@@ -121,22 +122,30 @@ $('#checkInButton').on('click', function () {
     //     leftEyeBbrow: JSON.stringify(leftEyeBbrow),
     //     rightEyeBrow: JSON.stringify(rightEyeBrow)
     // }
+    function descriptor32formatter(descriptor) {
+        // Convert to Float32 array and put in brackets
+        return [new Float32Array(descriptor)]
+    }
+
+    var faceObject2 = new faceapi.LabeledFaceDescriptors("Bill", descriptor32formatter(faceToStore.descriptor));
+    // console.log("faceobject2: ",faceObject2);
+
 
     var faceObject = {
         name: "Bill",
-        descriptors: JSON.parse(JSON.stringify(faceToStore.landmarks._positions))
+        descriptors: faceToStore.descriptor
     }
-    console.log(faceObject);
+    console.log("faceobject", faceObject2);
 
     $.ajax({
         method: 'POST',
         url: 'api/addNewFace',
-        data: JSON.stringify(faceObject),
+        data: JSON.stringify(faceObject2),
         headers: {
             'Content-Type': 'application/json',
         },
     }).then(data => {
-        console.log(data);
+        console.log("received:", data);
     })
 
 });
