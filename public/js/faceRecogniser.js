@@ -16,7 +16,7 @@ function buildFaceMatchLibrary() {
                 
                 var labeledDescriptors = buildLabeledDescriptors(data);
                 // Init facematcher with descriptors
-                var faceMatcher = new faceapi.FaceMatcher([labeledDescriptors], 0.6);
+                var faceMatcher = new faceapi.FaceMatcher([labeledDescriptors], 0.5);
 
                 console.log("facematcher from within", faceMatcher);
                 // Resolve promise with facematched data
@@ -86,8 +86,6 @@ function startCapture() {
     )
 }
 
-
-
 // When the video starts playing
 $('#video').on('play', function () {
     // Create canvas from the video
@@ -101,10 +99,8 @@ $('#video').on('play', function () {
         height: video.height
     };
 
+    // Match dimensions of canvas and display size
     faceapi.matchDimensions(canvas, displaySize);
-
-    // Set the found face variable to false
-    var setFoundFace = false;
 
     // Build the face match library then
     buildFaceMatchLibrary().then(function(faceMatcher) {
@@ -146,20 +142,21 @@ $('#video').on('play', function () {
                 return faceMatcher.matchDescriptor(detects.descriptor);
             });
 
+            console.log("results: ", results);
             // If Results found
             if (results) {
-                // Store in labelFound without euclidean distance
-                var labelFound = results.toString().split(" ")[0]
-                
-                console.log("results", labelFound);
+                // Store label and euclidean threshold strings from results
+                var labelFound = results.toString().split(" ")[0];
+                // Grab Euclidean threshold to check
+                var eucThresh = results[0]._distance;
 
+                console.log("results", eucThresh);
                 // If found to match original data to match, grant match
-                if (labelFound == faceMatcher.labeledDescriptors[0]._label) {
-                    console.log("match found!");
+                if (eucThresh < 0.6) {
+                    console.log("match found!: "+labelFound);
                     // Stop facial scanning (stop interval)
                     clearInterval(intervalID);
                 }
-
             }
 
             // Every 1 second

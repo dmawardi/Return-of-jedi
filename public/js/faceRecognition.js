@@ -1,16 +1,15 @@
-// import { json } from "sequelize/types";
-
-// import { json } from "sequelize/types";
-
-// import { image } from "@tensorflow/tfjs-core";
-
+// Init variables
 var video = document.querySelector('video');
 var storeFace;
-
-// var faceapi = require('face-api.js');
-
 var webcamStream;
 
+// Convert descriptor to float32 format required for face-api
+function descriptor32formatter(descriptor) {
+    // Convert to Float32 array and put in brackets
+    return [new Float32Array(descriptor)]
+}
+
+// Start capturing with the video cam
 function startCapture() {
     navigator.getUserMedia({
             video: {}
@@ -28,8 +27,6 @@ function startCapture() {
     )
 }
 
-
-
 // When the video starts playing
 $('#video').on('play', function () {
     // Create canvas from the video
@@ -43,6 +40,7 @@ $('#video').on('play', function () {
         height: video.height
     };
 
+    // match the canvas size to the display size of the video
     faceapi.matchDimensions(canvas, displaySize);
 
     // Set the found face variable to false
@@ -51,22 +49,28 @@ $('#video').on('play', function () {
     // Set an interval for detecting faces
     setInterval(async function () {
 
+        // Detect all faces: using landmarks, expressions and descriptors
         var detections = await faceapi.detectAllFaces(video,
             new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions().withFaceDescriptors();
 
         console.log(detections);
 
+        // If there was a detection found and the set found face hasn't been set to true
         if (detections.length = 1 && !setFoundFace) {
-            console.log("storing face");
+            // Store the first set of features in the detections array
             storeFace = detections[0];
             // if storeface is not undefined
             if (storeFace) {
+                // Set found face to true
                 setFoundFace = true;
+
+                // Tell user that their model has been taken and they are able to retry (set foundFace back to false) or to proceed
+                console.log("A model has been generated, Press Send Model when ready to send or capture again");
+                // Show button to send model
+                $('#sendModelButton').show();
 
             }
         }
-
-
 
         // Make boxes properly sized for video
         var resizedDetections = await faceapi.resizeResults(detections, displaySize);
@@ -77,70 +81,26 @@ $('#video').on('play', function () {
         // Draw landmarks on face
         faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
 
-
-        // Build facematch library from already held data
-        // function buildFaceMatchLibrary(data) {
-
-        // }
-
-        // var faceMatcher = new faceapi.FaceMatcher(detections)
-
-        // detections.forEach(fd => {
-        //     const bestMatch = faceMatcher.findBestMatch(fd.descriptor)
-        //     console.log(bestMatch.toString())
-        //   })
-
-        // Every 1 millisecond
+        // Every 1 second
     }, 1000);
 });
 
-$('#checkInButton').on('click', function () {
+// When the send model button is pressed
+$('#sendModelButton').on('click', function () {
     // Grab stored face and store in separate variable for sending
     var faceToStore = storeFace;
     // console.log(JSON.stringify(faceToStore.landmarks._positions));
     console.log("facetostore: "+faceToStore);
 
+    var faceObject = new faceapi.LabeledFaceDescriptors("Bill", descriptor32formatter(faceToStore.descriptor));
 
-    // Split data into separate points if required and able to be read back in
-    const jawOutline = faceToStore.landmarks.getJawOutline()
-    const nose = faceToStore.landmarks.getNose()
-    const mouth = faceToStore.landmarks.getMouth()
-    const leftEye = faceToStore.landmarks.getLeftEye()
-    const rightEye = faceToStore.landmarks.getRightEye()
-    const leftEyeBbrow = faceToStore.landmarks.getLeftEyeBrow()
-    const rightEyeBrow = faceToStore.landmarks.getRightEyeBrow()
+    console.log("faceobject", faceObject);
 
-    // Print face detection
-    console.log("facetostore: ",faceToStore);
-    // var faceObject = {
-    //     name: 'Bill',
-    //     jawOutline: JSON.stringify(jawOutline),
-    //     nose: JSON.stringify(nose),
-    //     mouth: JSON.stringify(mouth),
-    //     leftEye: JSON.stringify(leftEye),
-    //     rightEye: JSON.stringify(rightEye),
-    //     leftEyeBbrow: JSON.stringify(leftEyeBbrow),
-    //     rightEyeBrow: JSON.stringify(rightEyeBrow)
-    // }
-    function descriptor32formatter(descriptor) {
-        // Convert to Float32 array and put in brackets
-        return [new Float32Array(descriptor)]
-    }
-
-    var faceObject2 = new faceapi.LabeledFaceDescriptors("Bill", descriptor32formatter(faceToStore.descriptor));
-    // console.log("faceobject2: ",faceObject2);
-
-
-    var faceObject = {
-        name: "Bill",
-        descriptors: faceToStore.descriptor
-    }
-    console.log("faceobject", faceObject2);
-
+    // Make a post request to the server with all the new face descriptors
     $.ajax({
         method: 'POST',
         url: 'api/addNewFace',
-        data: JSON.stringify(faceObject2),
+        data: JSON.stringify(faceObject),
         headers: {
             'Content-Type': 'application/json',
         },
@@ -166,6 +126,9 @@ Promise.all([
 
     // Then start capturing with webcam
 ]).then(function () {
+    // Hide send model button to start with
+    $('#sendModelButton').hide();
+    // Start webcam capture
     startCapture();
 
 });
