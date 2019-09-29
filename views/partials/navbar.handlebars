@@ -1,0 +1,14 @@
+<div class="masthead">
+  <nav>
+    <ul class="nav nav-justified">
+      <li class="active"><a href="/">Home</a></li>
+      {{#if isAuthenticated}}
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="/logout">Logout</a></li>
+      {{else}}
+        <li><a href="/register">Sign Up</a></li>
+        <li><a href="/login">Sign In</a></li>
+      {{/if}}
+    </ul>
+  </nav>
+</div>
