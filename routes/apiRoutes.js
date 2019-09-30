@@ -53,29 +53,15 @@ module.exports = function (app) {
   });
 
   // Create a new example
-  app.post("/api/addNewFace", function (req, res) {
-    console.log("someone is sending a post");
-    console.log(req.body);
+  app.post("/api/addNewFace", function(req, res) {
+    // Assign request body to facialModel
     var facialModel = req.body;
-    console.log(facialModel);
+    // Insert facial model into database
     fs.writeFile("faceDB/facedb.txt", JSON.stringify(facialModel), function(error) {
-      if (error) throw error;
+      if (error) throw res.sendStatus(500);
       console.log("File save");
     });
-    res.json(req.body);
+    // Send completed connection status
+    res.sendStatus(200);
   });
-
-  function extractNewFace(data) {
-    var faceObject = {
-      name: data.name,
-      jawOutline: JSON.parse(data.jawOutline),
-      nose: JSON.parse(data.nose),
-      mouth: JSON.parse(data.mouth),
-      leftEye: JSON.parse(data.leftEye),
-      rightEye: JSON.parse(data.rightEye),
-      leftEyeBbrow: JSON.parse(data.leftEyeBbrow),
-      rightEyeBrow: JSON.parse(data.rightEyeBrow)
-    };
-    return faceObject;
-  }
 };

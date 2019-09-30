@@ -11,15 +11,14 @@ function descriptor32formatter(descriptor) {
 
 // Start capturing with the video cam
 function startCapture() {
+    // Grab user media through navigator
     navigator.getUserMedia({
             video: {}
         },
-
         // successCallback
         function (localMediaStream) {
             video.srcObject = localMediaStream;
         },
-
         // errorCallback
         function (err) {
             console.log("The following error occured: " + err);
@@ -53,8 +52,6 @@ $('#video').on('play', function () {
         var detections = await faceapi.detectAllFaces(video,
             new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions().withFaceDescriptors();
 
-        console.log(detections);
-
         // If there was a detection found and the set found face hasn't been set to true
         if (detections.length = 1 && !setFoundFace) {
             // Store the first set of features in the detections array
@@ -68,7 +65,6 @@ $('#video').on('play', function () {
                 console.log("A model has been generated, Press Send Model when ready to send or capture again");
                 // Show button to send model
                 $('#sendModelButton').show();
-
             }
         }
 
@@ -89,12 +85,9 @@ $('#video').on('play', function () {
 $('#sendModelButton').on('click', function () {
     // Grab stored face and store in separate variable for sending
     var faceToStore = storeFace;
-    // console.log(JSON.stringify(faceToStore.landmarks._positions));
-    console.log("facetostore: "+faceToStore);
 
+    // Use labeledFaceDescriptors to create 
     var faceObject = new faceapi.LabeledFaceDescriptors("Bill", descriptor32formatter(faceToStore.descriptor));
-
-    console.log("faceobject", faceObject);
 
     // Make a post request to the server with all the new face descriptors
     $.ajax({
@@ -104,6 +97,7 @@ $('#sendModelButton').on('click', function () {
         headers: {
             'Content-Type': 'application/json',
         },
+        // Then
     }).then(data => {
         console.log("received:", data);
     })

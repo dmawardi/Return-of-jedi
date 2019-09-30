@@ -1,3 +1,4 @@
+// Init variables
 var video = document.querySelector('video');
 var storeFace;
 var webcamStream;
@@ -11,14 +12,12 @@ function buildFaceMatchLibrary() {
             // Place call to grab face model data
             $.get('/api/getCompanyFaceData', function (data) {
                 console.log('Received Data: '+data);
-
-                console.log('json parsed', JSON.parse(data));
                 
+                // Build labeled Descriptors and store
                 var labeledDescriptors = buildLabeledDescriptors(data);
                 // Init facematcher with descriptors
                 var faceMatcher = new faceapi.FaceMatcher([labeledDescriptors], 0.5);
 
-                console.log("facematcher from within", faceMatcher);
                 // Resolve promise with facematched data
                 resolve(faceMatcher);
             });
@@ -28,7 +27,6 @@ function buildFaceMatchLibrary() {
             // Reject promise with error
             reject(err);
         }
-
     })
 }
 
@@ -36,7 +34,7 @@ function buildFaceMatchLibrary() {
 function revertStringifiedArray(arrayDict) {
     // Init array for append
     var newArray = [];
-    // Iterate till 127 to grab all items
+    // Iterate from 0 till 127 to grab all items
     for (let i = 0; i < 128; i++){
         // Append item to array
         newArray.push(arrayDict[i])
@@ -49,13 +47,9 @@ function revertStringifiedArray(arrayDict) {
 function buildLabeledDescriptors(data) {
     // Parse data as JSON
     userFace = JSON.parse(data);
-    console.log("user face: ", userFace);
 
     // // Build user descriptor as float 32 array
     var userDescriptors = revertStringifiedArray(userFace._descriptors[0])
-    
-    console.log("user descriptors: ", userDescriptors);
-    console.log("userface descr", userFace._descriptors[0]);
 
     // Build labeled descriptors from user descriptors
     var labeledDescriptors = 
@@ -63,9 +57,8 @@ function buildLabeledDescriptors(data) {
             userFace._label,
            [userDescriptors]
         )
+    // return labeled descriptors
     return labeledDescriptors;
-    // return userFace;
-
 }
 // Start capturing with the web cam
 function startCapture() {
@@ -73,12 +66,10 @@ function startCapture() {
     navigator.getUserMedia({
             video: {}
         },
-
         // successCallback
         function (localMediaStream) {
             video.srcObject = localMediaStream;
         },
-
         // errorCallback
         function (err) {
             console.log("The following error occured: " + err);
@@ -104,19 +95,12 @@ $('#video').on('play', function () {
 
     // Build the face match library then
     buildFaceMatchLibrary().then(function(faceMatcher) {
-        console.log("initial Face Matcher", faceMatcher);
-        // Assign output data to faceMatcher 
-
-
         // Set an interval for detecting faces
         var intervalID = setInterval(async function () {
             // Start detecting faces with face-api
             var detections = await faceapi.detectAllFaces(video,
                 // Use the Tiny Face Detectorto initialize using face landmarks and face expressions
                 new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions().withFaceDescriptors();
-
-
-            console.log(detections);
 
             // Make boxes properly sized for video
             var resizedDetections = await faceapi.resizeResults(detections, displaySize);
@@ -127,22 +111,14 @@ $('#video').on('play', function () {
             // Draw landmarks on face
             faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
 
-            // faceMatcher = new faceapi.FaceMatcher(detections)
-
             console.log("resizedDetections", resizedDetections);
-            // console.log("resizedDetections[0].descriptor", resizedDetections[0].descriptor);
-            // console.log(faceMatcher.matchDescriptor(resizedDetections[0].descriptor));
-
 
             // Store in results the matched detections
             var results = resizedDetections.map(function (detects) {
-                console.log("detects", detects);
-                console.log("facematcher", faceMatcher)
-                // Use facematcher to test current detections
+                // Use facematcher to test current detection
                 return faceMatcher.matchDescriptor(detects.descriptor);
             });
 
-            console.log("results: ", results);
             // If Results found
             if (results) {
                 // Store label and euclidean threshold strings from results
@@ -150,7 +126,6 @@ $('#video').on('play', function () {
                 // Grab Euclidean threshold to check
                 var eucThresh = results[0]._distance;
 
-                console.log("results", eucThresh);
                 // If found to match original data to match, grant match
                 if (eucThresh < 0.6) {
                     console.log("match found!: "+labelFound);
