@@ -1,6 +1,6 @@
 # Return-of-jedi
 ## Employer Pages
-![GitHub Logo](https://github.com/dmawardi/Return-of-jedi/tree/master/public/imgs/adminpages.png =300x242)
+![Admin](https://github.com/dmawardi/Return-of-jedi/blob/master/public/imgs/adminpages.png?raw=true=300x242)
 
 ## Employee pages
-![GitHub Logo](https://github.com/dmawardi/Return-of-jedi/tree/master/public/imgs/customerview.png =150x120)
+![Employee](https://github.com/dmawardi/Return-of-jedi/blob/master/public/imgs/customerview.png?raw=true=150x120)
