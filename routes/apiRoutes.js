@@ -4,6 +4,9 @@ var passport = require("../config/passport");
 const saltRounds = 10;
 
 module.exports = function (app) {
+  // app.post("/api/login", function(req, res) {
+  //   res.json(req.user);
+  // });
   // Get all examples
   // app.get("/api/examples", function (req, res) {
   //   db.Example.findAll({}).then(function (dbExamples) {
@@ -12,18 +15,12 @@ module.exports = function (app) {
   // });
 
   // Register a new employer
-  app.post("/api/employerRegister", (req, res) => {
+  app.post("/api/register", (req, res) => {
 
-    db.Employer.findOne({
-      where: {
-        employerEmail: req.body.employerEmail
-      }
-    }).then(function (employer) {
+    db.Employer.findOne({where: {employerEmail: req.body.employerEmail}})
+    .then(function (employer) {
       if (employer) {
-        return done(null, false, {
-          message: 'That email is already taken'
-        });
-
+        res.send(false)
       } else {
         bcrypt.hash(req.body.employerPassword, saltRounds, function (err, hash) {
           db.Employer.create({
@@ -31,7 +28,7 @@ module.exports = function (app) {
             employerName: req.body.employerName,
             employerPassword: hash,
             employerCompanyName: req.body.employerCompanyName
-          }).then(function (data) {
+          }).then(function (data) {            
             res.redirect(307, "/api/login");
           }).catch((function (err) {
             res.status(401).json(err);
@@ -43,16 +40,17 @@ module.exports = function (app) {
   });
 
   // emploer login
-  app.post('/api/login', (req, res) => {
-
+  app.post('/api/login',  (req, res) => {
+    // console.log(req.body.employerEmail)
     db.Employer.findOne({
       where: {
         employerEmail: req.body.employerEmail
       }
     }).then(function (employer) {
       if (!employer) {
-        res.redirect('/');
-      } else {
+        res.send(false)
+        // res.redirect('/');
+       } else {
         bcrypt.compare(req.body.employerPassword, employer.employerPassword, function (err, result) {
           if (err) {
             throw err
@@ -60,10 +58,27 @@ module.exports = function (app) {
             res.send(result);
           }
         });
-      }
+      }//
     });
   });
 
+   // Route for getting some data about our user to be used client side
+   app.get("/api/employer_data", function(req, res) {
+
+     console.log("lkajsdlkjf;asd ;NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN", req)
+     
+    // if (!req.user) {
+    //   // The user is not logged in, send back an empty object
+    //   res.json({});
+    // } else {
+      // Otherwise send back the user's email and id
+      // Sending back a password, even a hashed password, isn't a good idea
+      // res.json({
+      //   email: req.employer.employerEmail,
+      //   id: req.employer.id
+      // });
+    // }
+  });
 
   // Route for logging user out
   app.get("/logout", function (req, res) {

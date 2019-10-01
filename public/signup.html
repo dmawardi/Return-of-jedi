@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Employer Signup</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <link rel="stylesheet" href="/styles/styles.css" media="screen" title="no title" charset="utf-8">
+ 
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <h2>Employer Sign Up Form</h2>
+
+
+
+
+        <form class="form-signin"
+            oninput='confirmationPassword.setCustomValidity(confirmationPassword.value != employerPassword.value ? "Passwords do not match." : "")'>
+                
+            <label for="employerEmail" class="sr-only">Email address</label>
+            <input type="email" id="employerEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
+            
+            <label for="employerName" class="sr-only">Name</label>
+            <input type="text" id="employerName" name="name" class="form-control" placeholder="Name" required>
+            
+            <label for="employerCompanyName" class="sr-only">Company Name</label>
+            <input type="text" id="employerCompanyName" name="companyname" class="form-control" placeholder="Company name" >
+
+            <label for="employerPassword" class="sr-only">Password</label>
+            <input type="password" id="employerPassword" name="password" class="form-control" placeholder="Password" required>
+            
+            <label for="inputConfirmPassword" class="sr-only">Confirm Password</label>
+            <input type="password" id="inputConfirmPassword" name="confirmationPassword" class="form-control" placeholder="Confirm Password" required>
+            
+            <br/>
+            
+            <button id="signup" class="btn btn-lg btn-default btn-block" type="submit">Sign up</button>
+       
+        </form>
+
+        <div id="emailtaken" class="alert alert-danger invisible" role="alert">
+            The email is already taken!
+        </div>
+       
+
+
+
+
+
+        <br />
+        <p>Or log in <a href="/login">here</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="js/signup.js"></script>
+
+</body>
+
+</html>

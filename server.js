@@ -1,18 +1,33 @@
-var express = require("express");
-var exphbs = require("express-handlebars");
-var path = require("path");
 
+// Requiring necessary npm packages
+var exphbs = require("express-handlebars");
+var express = require("express");
+var session = require("express-session");
+// Requiring passport as we've configured it
+var passport = require("./config/passport");
 
 var db = require("./models");
-
-var app = express();
 var PORT = process.env.PORT || 3000;
 
+// Creating express app and configuring middleware needed for authentication
+var app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static("public"));
+
+
 // Middleware
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(express.static("public"));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static("public"));
+
+// We need to use sessions to keep track of our user's login status
+// We need to use sessions to keep track of our user's login status
+app.use(session({ secret: "keyboard cat", resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+
 require("dotenv").config();
 
 // Handlebars
@@ -28,7 +43,7 @@ app.set("view engine", "handlebars");
 require("./routes/apiRoutes")(app);
 require("./routes/htmlRoutes")(app);
 
-var syncOptions = { force: false };
+var syncOptions = { force: true };
 
 // If running a test, set syncOptions.force to true
 // clearing the `testdb`
@@ -49,11 +64,7 @@ db.sequelize.sync(syncOptions).then(function() {
 
 module.exports = app;
 
-
-
-
-
-    // "username": process.env.DB_USER,
-    // "password": process.env.DB_PASSWORD,
-    // "database": process.env.DB_NAME,
-    // "host": process.env.NODE_ENV,
+// "username": process.env.DB_USER,
+// "password": process.env.DB_PASSWORD,
+// "database": process.env.DB_NAME,
+// "host": process.env.NODE_ENV,
