@@ -11,8 +11,8 @@ function buildFaceMatchLibrary() {
         try {
             // Place call to grab face model data
             $.get('/api/getCompanyFaceData', function (data) {
-                console.log('Received Data: '+data);
-                
+                console.log('Received Data: ' + data);
+
                 // Build labeled Descriptors and store
                 var labeledDescriptors = buildLabeledDescriptors(data);
                 // Init facematcher with descriptors
@@ -35,7 +35,7 @@ function revertStringifiedArray(arrayDict) {
     // Init array for append
     var newArray = [];
     // Iterate from 0 till 127 to grab all items
-    for (let i = 0; i < 128; i++){
+    for (let i = 0; i < 128; i++) {
         // Append item to array
         newArray.push(arrayDict[i])
     }
@@ -52,10 +52,10 @@ function buildLabeledDescriptors(data) {
     var userDescriptors = revertStringifiedArray(userFace._descriptors[0])
 
     // Build labeled descriptors from user descriptors
-    var labeledDescriptors = 
+    var labeledDescriptors =
         new faceapi.LabeledFaceDescriptors(
             userFace._label,
-           [userDescriptors]
+            [userDescriptors]
         )
     // return labeled descriptors
     return labeledDescriptors;
@@ -94,7 +94,7 @@ $('#video').on('play', function () {
     faceapi.matchDimensions(canvas, displaySize);
 
     // Build the face match library then
-    buildFaceMatchLibrary().then(function(faceMatcher) {
+    buildFaceMatchLibrary().then(function (faceMatcher) {
         // Set an interval for detecting faces
         var intervalID = setInterval(async function () {
             // Start detecting faces with face-api
@@ -128,9 +128,12 @@ $('#video').on('play', function () {
 
                 // If found to match original data to match, grant match
                 if (eucThresh < 0.6) {
-                    console.log("match found!: "+labelFound);
+                    console.log("match found!: " + labelFound);
                     // Stop facial scanning (stop interval)
                     clearInterval(intervalID);
+
+                    // Sync up canvas with context and clear detection rectangles
+                    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
                 }
             }
 
