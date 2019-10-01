@@ -18,7 +18,6 @@ module.exports = function(app) {
 
 
   app.get("/login", function(req, res) {
-    
     res.render("login");
     // If the user already has an account send them to the members page
     // if (req.user) {
@@ -28,6 +27,54 @@ module.exports = function(app) {
     // res.sendFile(path.join(__dirname, "../public/login.html"));
   });
 
+  app.get("/webcam", function (req, res) {
+    db.Example.findAll({}).then(function (dbExamples) {
+      res.render("webCamCapture", {
+        msg: "Welcome!",
+        examples: dbExamples
+      });
+    });
+  });
+
+  // Load register page
+  app.get("/register", function (req, res) {
+    // If the user already has an account send them to the dashboard page
+    if (req.user) {
+      res.redirect("/dashboard");
+    }
+    res.sendFile(path.join(__dirname, "../public/register"));
+    // db.Example.findAll({}).then(function(dbExamples) {
+    //   res.render("register", {
+    //     msg: "Welcome!",
+    //     examples: dbExamples
+    //   });
+    // });
+  });
+
+  // Load register page
+  app.get("/login", function (req, res) {
+    // If the user already has an account send them to the members page
+    if (req.user) {
+      res.redirect("/members");
+    }
+    res.sendFile(path.join(__dirname, "../public/login.html"));
+
+    // db.Example.findAll({}).then(function(dbExamples) {
+    //   res.render("login", {
+    //     msg: "Welcome!",
+    //     examples: dbExamples
+    //   });
+    // });
+  });
+
+  // Here we've add our isAuthenticated middleware to this route.
+  // If a user who is not logged in tries to access this route they will be redirected to the signup page
+  app.get("/dashboard", /* isAuthenticated,*/ function(req, res) {
+    res.render("dashboard");
+  });
+
+  // Face Recognition Pages
+  // Load webcam page
   app.get("/webcam", function (req, res) {
     db.Example.findAll({}).then(function (dbExamples) {
       res.render("webCamCapture", {
@@ -47,14 +94,9 @@ module.exports = function(app) {
     });
   });
 
-  // Here we've add our isAuthenticated middleware to this route.
-  // If a user who is not logged in tries to access this route they will be redirected to the signup page
-  app.get("/dashboard", /* isAuthenticated,*/ function(req, res) {
-    res.render("dashboard");
-  });
-
   // Render 404 page for any unmatched routes
   app.get("*", function (req, res) {
     res.render("404");
   });
+
 };
