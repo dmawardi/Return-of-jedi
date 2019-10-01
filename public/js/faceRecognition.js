@@ -72,6 +72,10 @@ $('#video').on('play', function () {
         var resizedDetections = await faceapi.resizeResults(detections, displaySize);
         // Sync up canvas with context and clear detection rectangles
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+        // Get video position and match canvas
+        var videoPosition = video.getBoundingClientRect();
+        canvas.style.top = videoPosition.y + "px";
+        canvas.style.left = videoPosition.x + "px";
         // draw boxes around faces
         faceapi.draw.drawDetections(canvas, resizedDetections);
         // Draw landmarks on face
