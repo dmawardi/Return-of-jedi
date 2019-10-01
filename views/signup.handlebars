@@ -1,0 +1,51 @@
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <h2>Employer Sign Up Form</h2>
+
+        <form class="form-signin"
+            oninput='confirmationPassword.setCustomValidity(confirmationPassword.value != employerPassword.value ? "Passwords do not match." : "")'>
+                
+            <label for="employerEmail" class="sr-only">Email address</label>
+            <input type="email" id="employerEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
+            
+            <label for="employerName" class="sr-only">Name</label>
+            <input type="text" id="employerName" name="name" class="form-control" placeholder="Name" required>
+            
+            <label for="employerCompanyName" class="sr-only">Company Name</label>
+            <input type="text" id="employerCompanyName" name="companyname" class="form-control" placeholder="Company name" >
+
+            <label for="employerPassword" class="sr-only">Password</label>
+            <input type="password" id="employerPassword" name="password" class="form-control" placeholder="Password" required>
+            
+            <label for="inputConfirmPassword" class="sr-only">Confirm Password</label>
+            <input type="password" id="inputConfirmPassword" name="confirmationPassword" class="form-control" placeholder="Confirm Password" required>
+            
+            <br/>
+            
+            <button id="signup" class="btn btn-lg btn-default btn-block" type="submit">Sign up</button>
+       
+        </form>
+
+        <div id="emailtaken" class="alert alert-danger invisible" role="alert">
+            The email is already taken!
+        </div>
+       
+
+
+
+
+
+        <br />
+        <p>Or log in <a href="/login">here</a></p>
+      </div>
+    </div>
+  </div>
+
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script src="/js/signup.js"></script>
