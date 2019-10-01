@@ -1,22 +1,31 @@
-      {{> navbar}}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <h2>Login Form</h2>
+        <form class="login">
+          <div class="form-group">
+            <label for="employerEmail">Email address</label>
+            <input type="email" class="form-control" id="employerEmail" placeholder="Email">
+          </div>
+          <div class="form-group">
+            <label for="employerPassword">Password</label>
+            <input type="password" class="form-control" id="employerPassword" placeholder="Password">
+          </div>
+          <button type="submit" class="btn btn-default">Login</button>
+        </form>
+        <br />
 
-<form class="form-signin" action="/api/login" method="POST">
-  <h2 class="form-signin-heading">Please sign in</h2>
- 
-  <label for="email" class="sr-only">Email address</label>
-  <input type="email" id="email" name="email" class="form-control" placeholder="Email address" required autofocus>
- 
-  <label for="password" class="sr-only">Password</label>
-  <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
- 
-  <br/>
-   
-  <button id="employerSignIn" class="btn btn-lg btn-default btn-block" type="submit">Sign in</button>
-</form>
+        <div id="loginAlert" class="alert alert-danger invisible" role="alert">
+           Incorrect email or password
+        </div>
 
-{{result}}
+        <br>
+        <p>Or sign up <a href="/">here</a></p>
+      </div>
+    </div>
+  </div>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 
-<script src="/js/index.js"></script>
+<script src="/js/login.js"></script>

@@ -16,7 +16,7 @@ module.exports = function (app) {
 
   // Register a new employer
   app.post("/api/register", (req, res) => {
-
+    
     db.Employer.findOne({where: {employerEmail: req.body.employerEmail}})
     .then(function (employer) {
       if (employer) {
@@ -28,8 +28,11 @@ module.exports = function (app) {
             employerName: req.body.employerName,
             employerPassword: hash,
             employerCompanyName: req.body.employerCompanyName
-          }).then(function (data) {            
-            res.redirect(307, "/api/login");
+          }).then(function (dbEmployer) {
+            
+            console.log("))))))))))))))))))))))))))))))))))))))))))))")
+            // res.redirect('/login')  
+            res.json(dbEmployer)  
           }).catch((function (err) {
             res.status(401).json(err);
           }));

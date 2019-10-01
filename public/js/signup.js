@@ -39,8 +39,9 @@ $(document).ready(function() {
       employerCompanyName: employerData.employerCompanyName
     })
       .then(function(data) {
-          // console.log(data)
-        if (data) {              
+        if (data) {
+          console.log("_)))))))))))))))))))))))((((((&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", data)
+
           window.location.replace("/login");
         }else{
           $("#emailtaken").removeClass("invisible");
