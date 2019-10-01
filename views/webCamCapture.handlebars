@@ -1,0 +1,34 @@
+<div id="home">
+  <div class="container">
+    <div class="row">
+      <div class="col-8 offset-2">
+        <h1>{{msg}}</h1>
+        <h2>This is our Capture Page!</h2>
+        {{!-- Video section --}}
+        <div class="container" id="capture">
+          <video id="video" width="720" height="560" autoplay muted></video>
+        </div>
+        <button type="button" class="btn btn-info" id="sendModelButton">Send Model</button>
+
+
+
+       
+        <h3>Examples:</h3>
+        <ul id="example-list" class="list-group">
+          {{#each examples}}
+          <li data-id="{{this.id}}" class="list-group-item">
+            <a href="example/{{this.id}}">{{this.text}}</a>
+            <button class="btn btn-danger float-right delete">ｘ</button>
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script src="/js/face-api.min.js"></script>
+<script src="/js/faceRecognition.js"></script>
+{{!-- <script src="/js/imageProcessor.js"></script> --}}

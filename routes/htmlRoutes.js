@@ -6,9 +6,9 @@ var isAuthenticated = require("../config/middleware/isAuthenticated");
 
 var db = require("../models");
 
-module.exports = function(app) {
+module.exports = function (app) {
   // Load index page
-  app.get("/", function(req, res) {
+  app.get("/", function (req, res) {
     // If the user already has an account send them to the dashboard page
     if (req.user) {
       res.redirect("/dashboard");
@@ -23,9 +23,9 @@ module.exports = function(app) {
     // });
   });
 
-  app.get("/dashboard", function(req, res) {
+  app.get("/dashboard", function (req, res) {
 
-    app.get("/dashboard", isAuthenticated, function(req, res) {
+    app.get("/dashboard", isAuthenticated, function (req, res) {
       res.sendFile(path.join(__dirname, "../public/dashboard"));
     });
 
@@ -41,7 +41,7 @@ module.exports = function(app) {
   });
 
   // Load register page
-  app.get("/register", function(req, res) {
+  app.get("/register", function (req, res) {
     // If the user already has an account send them to the dashboard page
     if (req.user) {
       res.redirect("/dashboard");
@@ -56,7 +56,7 @@ module.exports = function(app) {
   });
 
   // Load register page
-  app.get("/login", function(req, res) {
+  app.get("/login", function (req, res) {
     // If the user already has an account send them to the members page
     if (req.user) {
       res.redirect("/members");
@@ -80,8 +80,29 @@ module.exports = function(app) {
   //   });
   // });
 
+  // Face Recognition Pages
+  // Load webcam page
+  app.get("/webcam", function (req, res) {
+    db.Example.findAll({}).then(function (dbExamples) {
+      res.render("webCamCapture", {
+        msg: "Welcome!",
+        examples: dbExamples
+      });
+    });
+  });
+
+  // Load checkin page
+  app.get("/checkin", function (req, res) {
+    db.Example.findAll({}).then(function (dbExamples) {
+      res.render("webCamCheckIn", {
+        msg: "Welcome!",
+        examples: dbExamples
+      });
+    });
+  });
+
   // Render 404 page for any unmatched routes
-  app.get("*", function(req, res) {
+  app.get("*", function (req, res) {
     res.render("404");
   });
 };
