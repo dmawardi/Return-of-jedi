@@ -1,13 +1,6 @@
 /* eslint-disable camelcase */
 module.exports = function(sequelize, DataTypes) {
   var TimeSheet = sequelize.define("TimeSheet", {
-    employeeID: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        len: [1]
-      }
-    },
     employeeStatus: {
       type: DataTypes.DATE,
       allowNull: false,

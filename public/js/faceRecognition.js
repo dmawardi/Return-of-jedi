@@ -93,10 +93,13 @@ $('#sendModelButton').on('click', function () {
     // Use labeledFaceDescriptors to create 
     var faceObject = new faceapi.LabeledFaceDescriptors("Bill", descriptor32formatter(faceToStore.descriptor));
 
+    // Assign below variable to user ID for API post call
+    var idOfUser;
+    
     // Make a post request to the server with all the new face descriptors
     $.ajax({
         method: 'POST',
-        url: 'api/addNewFace',
+        url: 'api/addNewFace/'+idOfUser,
         data: JSON.stringify(faceObject),
         headers: {
             'Content-Type': 'application/json',
