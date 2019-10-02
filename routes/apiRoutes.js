@@ -2,6 +2,7 @@ var db = require("../models");
 var bcrypt = require('bcrypt');
 var passport = require("../config/passport");
 var fs = require('fs');
+const saltRounds = 10;
 
 module.exports = function (app) {
 
