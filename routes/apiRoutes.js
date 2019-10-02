@@ -147,39 +147,68 @@ module.exports = function(app) {
 
   // API Routes for face recognition
   // API route for getting user's face model
-  app.get("/api/getCompanyFaceData", function(req, res) {
+  app.get("/api/getFaceData/:id", function(req, res) {
+    // Grab ID of user
+    var idOfUser = req.params.id;
     var fs = require("fs");
     var path = require("path");
     console.log("reading file");
     // Read data file
 
-    // Grab user's data
-    fs.readFile(path.join(__dirname, "../faceDB/facedb.txt"), "utf8", function(
-      err,
-      data
-    ) {
-      if (err) {
-        throw err;
+
+    db.Employee.findOne({
+      where: {
+        id: idOfUser
       }
-      // Print and return to user
-      var faceToMatch = data;
-      console.log(faceToMatch);
-      res.send(faceToMatch);
+    }).then(function(data) {
+      // Send back data contained within employee's image
+      res.send(data.employeeImage);
     });
+    // Previous Code
+    // fs.readFile(path.join(__dirname, "../faceDB/facedb.txt"), "utf8", function(
+    //   err,
+    //   data
+    // ) {
+    //   if (err) {
+    //     throw err;
+    //   }
+    //   // Print and return to user
+    //   var faceToMatch = data;
+    //   console.log(faceToMatch);
+    //   res.send(faceToMatch);
+    // });
   });
 
   // Create a new face
-  app.post("/api/addNewFace", function(req, res) {
+  app.post("/api/addNewFace/:id", function(req, res) {
     // Assign request body to facialModel
+    var idOfUser = req.params.id;
     var facialModel = req.body;
     // Insert facial model into database
-    fs.writeFile("faceDB/facedb.txt", JSON.stringify(facialModel), function(
-      error
-    ) {
-      if (error) throw res.sendStatus(500);
-      console.log("File save");
+    db.Employee.update(
+      {
+        id: idOfUser
+      },
+      {
+      employeeImage: JSON.stringify(facialModel)
+    }).then(function(){
+      // Send status 200
+      res.sendStatus(200);
+    }).catch(function(){
+      // Send status 500
+      res.sendStatus(500);
     });
-    // Send completed connection status
-    res.sendStatus(200);
+
+    // Previous code
+    // fs.writeFile("faceDB/facedb.txt", JSON.stringify(facialModel), function(
+    //   error
+    // ) {
+    //   if (error) throw res.sendStatus(500);
+    //   console.log("File save");
+    // });
+    // // Send completed connection status
+    // res.sendStatus(200);
+
+
   });
 };
