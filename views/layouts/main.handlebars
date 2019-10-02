@@ -13,18 +13,12 @@
 </head>
 
 <body>
-  {{#if success_messages }}
-      <div class="alert alert-success">{{success_messages}}</div>
-    {{/if}}
-    {{#if error_messages }}
-      <div class="alert alert-danger">{{error_messages}}</div>
-    {{/if}}
     <div class="container">
        {{> navbar}}
       {{{body}}}
     </div>
 
-{{> footer}}
+    {{> footer}}
   <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>

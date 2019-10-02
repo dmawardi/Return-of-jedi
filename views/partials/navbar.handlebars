@@ -4,12 +4,12 @@
       <li class="active"><a href="/">Home</a></li>
       {{#if isAuthenticated}}
         <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="/checkin">Check In</a></li>
+        <li><a href="/webcam">webcam</a></li>
         <li><a href="/logout">Logout</a></li>
       {{else}}
         <li><a href="/">Sign Up</a></li>
         <li><a href="/login">Sign In</a></li>
-        <li><a href="/checkin">Check In</a></li>
-        <li><a href="/webcam">webcam</a></li>
       {{/if}}
     </ul>
   </nav>
