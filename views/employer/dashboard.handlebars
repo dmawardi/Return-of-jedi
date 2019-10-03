@@ -1,12 +1,35 @@
  {{> navbar}}
-</nav>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6 col-md-offset-3">
-        <h2> <span class="employer-name"></span></h2>
-      </div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <h2> <span class="employer-name"></span></h2>
     </div>
   </div>
+</div> 
+
+
+<div class="container">
+  <!-- Card that displays the train schedule -->
+  <div class="card mb-3 border-primary">
+    <div class="card-header bg-primary text-white text-center">
+      <b>List of Employees at <span class="employer-company"></span></b>
+    </div>
+    <!-- table that holds the train data -->
+    <div class="table-responsive pl-2 pr-2">
+      <table class="table table-hover table-sm" id="train-table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Department</th>
+            <th scope="col">Contact</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 

@@ -45,15 +45,11 @@ module.exports = function(app) {
       // Sending back a password, even a hashed password, isn't a good idea
       res.json({
         email: req.user.employerEmail,
-        id: req.user.id
+        id: req.user.id,
+        company: req.user.employerCompanyName
       });
     }
   });
-
-
-
-
-
 
   /*------------------ADD EMPLOYEE PAGES--------------------*/
   app.post("/api/addEmployee", (req, res) => {
@@ -69,7 +65,6 @@ module.exports = function(app) {
       employeeImage: req.body.employeeImage,
       EmployerId: req.body.EmployerId
     }).then(function (dbEmployee) {
-      console.log("MMMMMMMMMMMMMMMMMBBBBBBBBBBBBBBBBBB", dbEmployee)
       res.json(dbEmployee)  
     }).catch((function (err) {
       res.status(401).json(err);
@@ -77,30 +72,29 @@ module.exports = function(app) {
 
   });
 
+   // PUT route for updating posts
+   app.put("/api/update/:id", function(req, res) {
 
-
-
+    db.Employee.update({
+      employeeName: req.body.employeeName,
+      employeeDepartment: req.body.employeeDepartment,
+      employeeContactNumber: req.body.employeeContactNumber
+      },{
+        where: {
+          id: req.params.id
+      }
+      }).then(function(dbEmployee) {
+      res.json(dbEmployee);
+    });
+  });
 
 
   app.get("/api/employees", function(req, res) {
-    db.Employee.findAll({}).then(function(results) {
-      res.json(results);
+    db.Employee.findAll({}).then(function(dbEmployees) { 
+      res.json(dbEmployees);
     });
   });
 
-  app.post("/api/employees", function(req, res) {
-    db.Employee.create({
-      employeeName: req.body.employeeName,
-      employeeDepartment: req.body.employeeDepartment,
-      employeePosition: req.body.employeePosition,
-      employeeAddress: req.body.employeeAddress,
-      employeeContactNumber: req.body.employeeContactNumber,
-      employeeDOB: req.body.employeeDOB,
-      employeeImage: req.body.employeeImage
-    });
-
-    res.status(204).end();
-  });
 
   app.get("/api/timesheet", function(req, res) {
     db.Timesheet.findAll({}).then(function(results) {
@@ -127,15 +121,18 @@ module.exports = function(app) {
   });
 
   // Delete an example by id
-  // app.delete("/api/examples/:id", function (req, res) {
-  //   db.Example.destroy({
-  //     where: {
-  //       id: req.params.id
-  //     }
-  //   }).then(function (dbExample) {
-  //     res.json(dbExample);
-  //   });
-  // });
+  app.delete("/api/employee/:id", function (req, res) {
+    console.log(":PPPPPPPPPPPPPPPPPPPPPPGGGGGGGGGGGGGg")
+
+    db.Employee.destroy({
+      where: {
+        id: req.params.id
+      }
+    }).then(function (dbEmployee) {
+      console.log(":OOOOOOOOOOOOOOOOOOOOOOOO")
+      res.json(dbEmployee);
+    });
+  });
 
   // API Routes for face recognition
   // API route for getting user's face model
@@ -156,19 +153,6 @@ module.exports = function(app) {
       // Send back data contained within employee's image
       res.send(data.employeeImage);
     });
-    // Previous Code
-    // fs.readFile(path.join(__dirname, "../faceDB/facedb.txt"), "utf8", function(
-    //   err,
-    //   data
-    // ) {
-    //   if (err) {
-    //     throw err;
-    //   }
-    //   // Print and return to user
-    //   var faceToMatch = data;
-    //   console.log(faceToMatch);
-    //   res.send(faceToMatch);
-    // });
   });
 
   // Create a new face
@@ -190,17 +174,6 @@ module.exports = function(app) {
       // Send status 500
       res.sendStatus(500);
     });
-  
-    // Previous code
-    // fs.writeFile("faceDB/facedb.txt", JSON.stringify(facialModel), function(
-    //   error
-    // ) {
-    //   if (error) throw res.sendStatus(500);
-    //   console.log("File save");
-    // });
-    // // Send completed connection status
-    // res.sendStatus(200);
-
 
   });
 

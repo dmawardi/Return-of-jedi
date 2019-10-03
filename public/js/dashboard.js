@@ -3,5 +3,167 @@ $(document).ready(function() {
   // and updates the HTML on the page
   $.get("/api/employer_data").then(function(data) {
     $(".employer-name").text("You are loged in as " + data.email);
+    $(".employer-company").text(data.company);
   });
+
+  // get the list of the employess on the dashboard
+  $.get("/api/employees").then(function(dbEmployee){
+
+    console.log(dbEmployee[0].id)
+    for (let index = 0; index < dbEmployee.length; index++) {
+      var edit = '<button class="editBtn" ><i class="fa fa-edit"></i></button>';
+      var del = '<button class="delBtn" data-delete = ' + dbEmployee[index].id + '><i class="fa fa-trash-o"></i></button>';      
+      var safe = '<button class="safeBtn" data-edit = ' + dbEmployee[index].id + ">&#10004;</button>";
+      var canCel = '<button class="cancelBtn"><i class="fa fa-close"></i></button>';
+
+       // Create the new row
+    var newRow = $("<tr>").append(
+      $("<td>").html(
+        "<div class='row_data' edit_type='click' col_name='name'>" + dbEmployee[index].employeeName +
+        "</div>"
+      ),
+      $("<td>").html(
+        "<div class='row_data' edit_type='click' col_name='department'>" + dbEmployee[index].employeeDepartment +
+        "</div>"
+      ),
+      // $("<td>").text(firstTrainTime),
+      $("<td>").html(
+        "<div class='row_data' edit_type='click' col_name='contact'>" + dbEmployee[index].employeeContactNumber +
+        "</div>"
+      ),
+   
+      $("<td>").html(edit + " " + del),
+      $("<td>").html(safe + " " + canCel)
+    );
+
+     // Append the new row to the table
+     $("#train-table > tbody").append(newRow);
+     $(".safeBtn").hide();
+     $(".cancelBtn").hide();
+
+    }
+  });
+
+  // 
+
+
+  // Edit button, edits a row 
+$(document).on("click", ".editBtn", function(event) {
+  event.preventDefault();
+
+  var tbl_row = $(this).closest("tr");
+  var row_id = tbl_row.attr("row_id");
+
+  tbl_row.find(".safeBtn").show();
+  tbl_row.find(".cancelBtn").show();
+  tbl_row.find(".delBtn").hide();
+  tbl_row.find(".editBtn").hide();
+
+  tbl_row
+    .find(".row_data")
+    .attr("contenteditable", "true")
+    .attr("edit_type", "button")
+    .addClass("bg-warning")
+    .css("padding", "3px");
+
+  tbl_row.find(".row_data").each(function(index, val) {
+    //this will help in case user decided to click on cancel button
+    $(this).attr("original_entry", $(this).html());
+  });
+});
+
+
+// delete button, deletes the whole row
+$(document).on("click", ".delBtn", function(event) {
+  event.preventDefault();
+
+  var recordID = $(this).attr("data-delete");
+
+  // database.ref("trains/" + recordID).remove();
+  console.log("hHHHHHHHHHHHHHHHHHHHH", recordID)
+  $.ajax({
+    method: "DELETE",
+    url: "/api/employee/" + recordID
+  })
+    .then(function() {
+      $(this).parent().parent().remove();
+    });
+});
+
+// cancel to edit the row
+$(document).on("click", ".cancelBtn", function(event) {
+  event.preventDefault();
+
+  var tbl_row = $(this).closest("tr");
+
+  var row_id = tbl_row.attr("row_id");
+
+  //hide save and cacel buttons
+  tbl_row.find(".safeBtn").hide();
+  tbl_row.find(".cancelBtn").hide();
+  tbl_row.find(".delBtn").show();
+  tbl_row.find(".editBtn").show();
+
+  //make the whole row editable
+  tbl_row
+    .find(".row_data")
+    .attr("edit_type", "click")
+    .removeClass("bg-warning")
+    .css("padding", "");
+
+  tbl_row.find(".row_data").each(function(index, val) {
+    $(this).html($(this).attr("original_entry"));
+  });
+});
+
+
+//--->save whole row entery > start
+$(document).on("click", ".safeBtn", function(event) {
+  event.preventDefault();
+  var tbl_row = $(this).closest("tr");
+
+  // var row_id = tbl_row.attr('row_id');
+  var data_edit = $(this).attr("data-edit");
+
+  tbl_row.find(".safeBtn").hide();
+  tbl_row.find(".cancelBtn").hide();
+  tbl_row.find(".delBtn").show();
+  tbl_row.find(".editBtn").show();
+
+  //make the whole row editable
+  tbl_row
+    .find(".row_data")
+    .attr("edit_type", "click")
+    .removeClass("bg-warning")
+    .css("padding", "");
+
+  //--->get row data > start
+  var newValues = [];
+  tbl_row.find(".row_data").each(function(index, val) {
+    var col_name = $(this).attr("col_name");
+    var col_val = $(this).html();
+    newValues[col_name] = col_val;
+  });
+  console.log("here: " + newValues);
+  var updatedValues = {
+    employeeName:newValues.name,
+    employeeDepartment: newValues.department,
+    employeeContactNumber: newValues.contact
+  }
+
+  $.ajax({
+    url: '/api/update/'+ data_edit,
+    type: 'PUT',
+    data: updatedValues,
+    success: function(data) {
+      if (data) {
+        
+      }
+    }
+  });
+
+
+});
+
+
 });
