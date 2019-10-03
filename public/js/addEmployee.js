@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
   // Getting references to our form and input
   var addEmployeeForm = $("form.form-addAnEmployee");
   var employeeName = $("input#employeeName");
@@ -10,14 +10,13 @@ $(document).ready(function() {
   var employeeImage = $("input#employeeImage");
   var EmployerId;
 
-  $.get("/api/employer_data").then(function(data) {
+  $.get("/api/employer_data").then(function (data) {
     EmployerId = data.id;
   });
 
   // When the signup button is clicked, we validate the email and password are not blank
-  addEmployeeForm.on("submit", function(event) {
+  addEmployeeForm.on("submit", function (event) {
     // alert("you clic");
-    console.log("HHHHHHHHHHHHHHHHHHH   ", EmployerId)
     event.preventDefault();
     var employeeData = {
       employeeName: employeeName.val().trim(),
@@ -49,19 +48,19 @@ $(document).ready(function() {
   // Otherwise we log any errors
   function addEmployeeFun(employeeData) {
     $.post("/api/addEmployee", {
-      employeeName: employeeData.employeeName,
-      employeeDepartment: employeeData.employeeDepartment,
-      employeePosition: employeeData.employeePosition,
-      employeeAddress: employeeData.employeeAddress,
-      employeeContactNumber: employeeData.employeeContactNumber,
-      employeeDOB: employeeData.employeeDOB,
-      employeeImage: employeeData.employeeImage,
-      EmployerId: employeeData.EmployerId
-    })
-      .then(function(data) {
-          console.log("::::::::::::::::::::::::::::::::::")
+        employeeName: employeeData.employeeName,
+        employeeDepartment: employeeData.employeeDepartment,
+        employeePosition: employeeData.employeePosition,
+        employeeAddress: employeeData.employeeAddress,
+        employeeContactNumber: employeeData.employeeContactNumber,
+        employeeDOB: employeeData.employeeDOB,
+        employeeImage: employeeData.employeeImage,
+        EmployerId: employeeData.EmployerId
+      })
+      .then(function (data) {
+        console.log("::::::::::::::::::::::::::::::::::")
         if (data) {
-          window.location.replace("/employer/addEmployee");
+          window.location.replace("/employer/dashboard");
           $("#employeeAddResultSuccess").removeClass("invisible");
           $("#employeeAddResultSuccess").text("Employee Added Successfully");
         } else {

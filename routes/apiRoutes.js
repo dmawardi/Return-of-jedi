@@ -4,29 +4,32 @@ var passport = require("../config/passport");
 var fs = require('fs');
 const saltRounds = 10;
 
-module.exports = function(app) {
+module.exports = function (app) {
   /*-------------------INDEX PAGE------------------------*/
-  app.post("/api/login", passport.authenticate("local"), function(req, res) {
+  app.post("/api/login", passport.authenticate("local"), function (req, res) {
     res.json(req.user);
   });
 
   /*------------------EMPLOYER PAGES--------------------*/
   // Register a new employer
   app.post("/api/signup", (req, res) => {
+    console.log("test");
     db.Employer.findOne({
-      where: { employerEmail: req.body.employerEmail }
-    }).then(function(employer) {
+      where: {
+        employerEmail: req.body.employerEmail
+      }
+    }).then(function (employer) {
       if (employer) {
         res.send(false);
       } else {
-        bcrypt.hash(req.body.employerPassword, saltRounds, function(err, hash) {
+        bcrypt.hash(req.body.employerPassword, saltRounds, function (err, hash) {
           db.Employer.create({
             employerEmail: req.body.employerEmail,
             employerName: req.body.employerName,
             employerPassword: hash,
             employerCompanyName: req.body.employerCompanyName
           }).then(function (dbEmployer) {
-            res.json(dbEmployer)  
+            res.json(dbEmployer)
           }).catch((function (err) {
             res.status(401).json(err);
           }));
@@ -34,9 +37,9 @@ module.exports = function(app) {
       }
     });
   });
-  
-   // Route for getting some data about our user to be used client side
-   app.get("/api/employer_data", function(req, res) {
+
+  // Route for getting some data about our user to be used client side
+  app.get("/api/employer_data", function (req, res) {
     if (!req.user) {
       // The user is not logged in, send back an empty object
       res.json({});
@@ -65,44 +68,54 @@ module.exports = function(app) {
       employeeImage: req.body.employeeImage,
       EmployerId: req.body.EmployerId
     }).then(function (dbEmployee) {
-      res.json(dbEmployee)  
+      res.json(dbEmployee)
     }).catch((function (err) {
       res.status(401).json(err);
     }));
 
   });
 
-   // PUT route for updating posts
-   app.put("/api/update/:id", function(req, res) {
+  // PUT route for updating posts
+  app.put("/api/update/:id", function (req, res) {
 
     db.Employee.update({
       employeeName: req.body.employeeName,
       employeeDepartment: req.body.employeeDepartment,
       employeeContactNumber: req.body.employeeContactNumber
-      },{
-        where: {
-          id: req.params.id
+    }, {
+      where: {
+        id: req.params.id
       }
-      }).then(function(dbEmployee) {
+    }).then(function (dbEmployee) {
       res.json(dbEmployee);
     });
   });
 
 
-  app.get("/api/employees", function(req, res) {
-    db.Employee.findAll({}).then(function(dbEmployees) { 
+  app.get("/api/employees/:id", function (req, res) {
+    db.Employee.findAll({
+
+      where: {
+
+        EmployerId: req.params.id
+      }
+
+    }).then(function (dbEmployees) {
       res.json(dbEmployees);
     });
   });
 
-
-  app.get("/api/timesheet", function(req, res) {
-    db.Timesheet.findAll({}).then(function(results) {
+  app.get("/api/allEmployee", function (req, res) {
+    db.Employee.findAll({}).then(function (dbEmployees) {
+      res.json(dbEmployees);
+    });
+  });
+  app.get("/api/timesheet", function (req, res) {
+    db.Timesheet.findAll({}).then(function (results) {
       res.json(results);
     });
   });
-
-  app.post("/api/timesheet", function(req, res) {
+  app.post("/api/timesheet", function (req, res) {
     db.Timesheet.create({
       employeeID: req.body.employeeID,
       employeeStatus: req.body.employeeStatus,
@@ -110,67 +123,57 @@ module.exports = function(app) {
       check_in: req.body.check_in,
       check_out: req.body.check_out
     });
-
     res.status(204).end();
   });
-
   // Route for logging user out
-  app.get("/logout", function(req, res) {
+  app.get("/logout", function (req, res) {
     req.logout();
     res.redirect("/");
   });
 
   // Delete an example by id
   app.delete("/api/employee/:id", function (req, res) {
-    console.log(":PPPPPPPPPPPPPPPPPPPPPPGGGGGGGGGGGGGg")
-
     db.Employee.destroy({
       where: {
         id: req.params.id
       }
     }).then(function (dbEmployee) {
-      console.log(":OOOOOOOOOOOOOOOOOOOOOOOO")
       res.json(dbEmployee);
     });
   });
 
   // API Routes for face recognition
   // API route for getting user's face model
-  app.get("/api/getFaceData/:id", function(req, res) {
+  app.get("/api/getFaceData/:id", function (req, res) {
     // Grab ID of user
     var idOfUser = req.params.id;
     var fs = require("fs");
     var path = require("path");
     console.log("reading file");
     // Read data file
-
-
     db.Employee.findOne({
       where: {
         id: idOfUser
       }
-    }).then(function(data) {
+    }).then(function (data) {
       // Send back data contained within employee's image
       res.send(data.employeeImage);
     });
   });
-
   // Create a new face
-  app.post("/api/addNewFace/:id", function(req, res) {
+  app.post("/api/addNewFace/:id", function (req, res) {
     // Assign request body to facialModel
     var idOfUser = req.params.id;
     var facialModel = req.body;
     // Insert facial model into database
-    db.Employee.update(
-      {
-        id: idOfUser
-      },
-      {
+    db.Employee.update({
+      id: idOfUser
+    }, {
       employeeImage: JSON.stringify(facialModel)
-    }).then(function(){
+    }).then(function () {
       // Send status 200
       res.sendStatus(200);
-    }).catch(function(){
+    }).catch(function () {
       // Send status 500
       res.sendStatus(500);
     });

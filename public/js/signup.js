@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
   // Getting references to our form and input
   var signUpForm = $("form.form-signin");
   var employerEmail = $("input#employerEmail");
@@ -7,8 +7,8 @@ $(document).ready(function() {
   var employerCompanyName = $("input#employerCompanyName");
 
   // When the signup button is clicked, we validate the email and password are not blank
-  signUpForm.on("submit", function(event) {
-    // alert("you clic");
+  signUpForm.on("submit", function (event) {
+    alert("you clic");
     event.preventDefault();
     var employerData = {
       employerEmail: employerEmail.val().trim(),
@@ -16,8 +16,10 @@ $(document).ready(function() {
       employerCompanyName: employerCompanyName.val().trim(),
       employerPassword: employerPassword.val().trim()
     };
- 
+    //console.log(employerPassword);
+
     if (!employerData.employerEmail || !employerData.employerPassword) {
+      console.log(employerData.employerEmail);
       return;
     }
     // If we have an email and password, run the signUpUser function
@@ -33,15 +35,16 @@ $(document).ready(function() {
   // Does a post to the signup route. If successful, we are redirected to the members page
   // Otherwise we log any errors
   function signUpUser(employerData) {
+    console.log("dsvdfbfgnghkkkkkkkkghkckghvchfdjvhfbdjkvfdbb hfvhjgbjknbgkjn");
     $.post("/api/signup", {
-      employerEmail: employerData.employerEmail,
-      employerPassword: employerData.employerPassword,
-      employerName: employerData.employerName,
-      employerCompanyName: employerData.employerCompanyName
-    })
-      .then(function(data) {
+        employerEmail: employerData.employerEmail,
+        employerPassword: employerData.employerPassword,
+        employerName: employerData.employerName,
+        employerCompanyName: employerData.employerCompanyName
+      })
+      .then(function (data) {
         if (data) {
-          window.location.replace("/employer/login");
+          window.location.replace("/");
         } else {
           $("#emailtaken").removeClass("invisible");
         }

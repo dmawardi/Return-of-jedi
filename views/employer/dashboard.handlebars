@@ -1,37 +1,90 @@
- {{> navbar}}
-<div class="container">
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-      <h2> <span class="employer-name"></span></h2>
-    </div>
-  </div>
-</div> 
+<div id="wrapper">
 
+  <!-- Header -->
+  <header id="header">
+    <div class="logo">
+      <span class="icon fa-gem"></span>
+    </div>
+    <div class="content">
+      <div class="inner">
+        <h1 class="employer-name"></h1>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#addnew">Add New</a></li>
+        <li><a href="#">Link</a></li>
+        <li><button onclick="exportTableToCSV('members.csv')">Export</button></li>
+      </ul>
+    </nav>
+    <table class="table table-hover table-sm" id="train-table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Department</th>
+          <th scope="col">Contact</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </header>
 
-<div class="container">
-  <!-- Card that displays the train schedule -->
-  <div class="card mb-3 border-primary">
-    <div class="card-header bg-primary text-white text-center">
-      <b>List of Employees at <span class="employer-company"></span></b>
-    </div>
-    <!-- table that holds the train data -->
-    <div class="table-responsive pl-2 pr-2">
-      <table class="table table-hover table-sm" id="train-table">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Department</th>
-            <th scope="col">Contact</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+  <!-- Main -->
+  <div id="main">
+
+    <!-- Login -->
+    <article id="addnew">
+      <h2 class="major">Add New Employee</h2>
+      <form id="add-form" class="form-addAnEmployee m-2">
+        <div class="fields">
+          <div class="field half">
+            <label for="employeeName">Employee Name</label>
+            <input type="Text" class="form-control" id="employeeName" placeholder="Enter Employee Name" required />
+          </div>
+          <div class="field half">
+            <label for="employeeDepartment">Employee Department</label>
+            <input type="Text" class="form-control" id="employeeDepartment" placeholder="Enter Employee Department"
+              required />
+          </div>
+          <div class="field half">
+            <label for="employeePosition">Employee Position</label>
+            <input type="Text" class="form-control" id="employeePosition" placeholder="Enter Employee Position"
+              required />
+          </div>
+          <div class="field half">
+            <label for="employeeAddress">Employee Address</label>
+            <input type="Text" class="form-control" id="employeeAddress" placeholder="Employee Address" required />
+          </div>
+          <div class="field half">
+            <label for="employeeContactNumber">Employee Contact Number</label>
+            <input type="Text" class="form-control" id="employeeContactNumber"
+              placeholder="Enter Employee Contact Number" required />
+          </div>
+          <div class="field half">
+            <label for="employeeDOB">Employee Date of Birth</label>
+            <input type="Text" class="form-control" id="employeeDOB" placeholder="Enter employee dob" required />
+          </div>
+          <div class="field">
+            <label for="employeeImage">Employee Image</label>
+            <input type="Text" class="form-control" id="employeeImage" placeholder="Enter employee image address"
+              required />
+          </div>
+        </div>
+        <ul class="actions">
+          <li><input type="submit" value="Register" class="primary" id="addEmployeeBtn" /></li>
+        </ul>
+      </form>
+    </article>
+
   </div>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <p class="copyright">&copy; Untitled. Design: <a href="#">JEDI</a>.</p>
+  </footer>
+
 </div>
 
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-
 <script src="/js/dashboard.js"></script>
+<script src="/js/addEmployee.js"></script>
