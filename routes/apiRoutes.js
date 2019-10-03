@@ -1,22 +1,18 @@
 var db = require("../models");
 var bcrypt = require("bcrypt");
 var passport = require("../config/passport");
+var fs = require('fs');
 const saltRounds = 10;
-var fs = require("fs");
 
 module.exports = function(app) {
-  // app.post("/api/login", function(req, res) {
-  //   res.json(req.user);
-  // });
-  // Get all examples
-  // app.get("/api/examples", function (req, res) {
-  //   db.Example.findAll({}).then(function (dbExamples) {
-  //     res.json(dbExamples);
-  //   });
-  // });
+  /*-------------------INDEX PAGE------------------------*/
+  app.post("/api/login", passport.authenticate("local"), function(req, res) {
+    res.json(req.user);
+  });
 
+  /*------------------EMPLOYER PAGES--------------------*/
   // Register a new employer
-  app.post("/api/register", (req, res) => {
+  app.post("/api/signup", (req, res) => {
     db.Employer.findOne({
       where: { employerEmail: req.body.employerEmail }
     }).then(function(employer) {
@@ -29,74 +25,36 @@ module.exports = function(app) {
             employerName: req.body.employerName,
             employerPassword: hash,
             employerCompanyName: req.body.employerCompanyName
-          })
-            .then(function(dbEmployer) {
-              console.log("))))))))))))))))))))))))))))))))))))))))))))");
-              // res.redirect('/login')
-              res.json(dbEmployer);
-            })
-            .catch(function(err) {
-              res.status(401).json(err);
-            });
+          }).then(function (dbEmployer) {
+            res.json(dbEmployer)  
+          }).catch((function (err) {
+            res.status(401).json(err);
+          }));
         });
       }
     });
   });
-
-  // emploer login
-  app.post("/api/login", (req, res) => {
-    // console.log(req.body.employerEmail)
-    db.Employer.findOne({
-      where: {
-        employerEmail: req.body.employerEmail
-      }
-    }).then(function(employer) {
-      if (!employer) {
-        res.send(false);
-        // res.redirect('/');
-      } else {
-        bcrypt.compare(
-          req.body.employerPassword,
-          employer.employerPassword,
-          function(err, result) {
-            if (err) {
-              throw err;
-            } else {
-              res.send(result);
-            }
-          }
-        );
-      } //
-    });
+  
+   // Route for getting some data about our user to be used client side
+   app.get("/api/employer_data", function(req, res) {
+    if (!req.user) {
+      // The user is not logged in, send back an empty object
+      res.json({});
+    } else {
+      // Otherwise send back the user's email and id
+      // Sending back a password, even a hashed password, isn't a good idea
+      res.json({
+        email: req.user.employerEmail,
+        id: req.user.id,
+        company: req.user.employerCompanyName
+      });
+    }
   });
 
-  // Route for getting some data about our user to be used client side
-  app.get("/api/employer_data", function(req, res) {
-    console.log(
-      "lkajsdlkjf;asd ;NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
-      req
-    );
+  /*------------------ADD EMPLOYEE PAGES--------------------*/
+  app.post("/api/addEmployee", (req, res) => {
+    console.log("POST ENTER SUCCESSFUL", req.body.EmployerId)
 
-    // if (!req.user) {
-    //   // The user is not logged in, send back an empty object
-    //   res.json({});
-    // } else {
-    // Otherwise send back the user's email and id
-    // Sending back a password, even a hashed password, isn't a good idea
-    // res.json({
-    //   email: req.employer.employerEmail,
-    //   id: req.employer.id
-    // });
-    // }
-  });
-
-  app.get("/api/employees", function(req, res) {
-    db.Employee.findAll({}).then(function(results) {
-      res.json(results);
-    });
-  });
-
-  app.post("/api/employees", function(req, res) {
     db.Employee.create({
       employeeName: req.body.employeeName,
       employeeDepartment: req.body.employeeDepartment,
@@ -104,11 +62,39 @@ module.exports = function(app) {
       employeeAddress: req.body.employeeAddress,
       employeeContactNumber: req.body.employeeContactNumber,
       employeeDOB: req.body.employeeDOB,
-      employeeImage: req.body.employeeImage
-    });
+      employeeImage: req.body.employeeImage,
+      EmployerId: req.body.EmployerId
+    }).then(function (dbEmployee) {
+      res.json(dbEmployee)  
+    }).catch((function (err) {
+      res.status(401).json(err);
+    }));
 
-    res.status(204).end();
   });
+
+   // PUT route for updating posts
+   app.put("/api/update/:id", function(req, res) {
+
+    db.Employee.update({
+      employeeName: req.body.employeeName,
+      employeeDepartment: req.body.employeeDepartment,
+      employeeContactNumber: req.body.employeeContactNumber
+      },{
+        where: {
+          id: req.params.id
+      }
+      }).then(function(dbEmployee) {
+      res.json(dbEmployee);
+    });
+  });
+
+
+  app.get("/api/employees", function(req, res) {
+    db.Employee.findAll({}).then(function(dbEmployees) { 
+      res.json(dbEmployees);
+    });
+  });
+
 
   app.get("/api/timesheet", function(req, res) {
     db.Timesheet.findAll({}).then(function(results) {
@@ -135,15 +121,18 @@ module.exports = function(app) {
   });
 
   // Delete an example by id
-  // app.delete("/api/examples/:id", function (req, res) {
-  //   db.Example.destroy({
-  //     where: {
-  //       id: req.params.id
-  //     }
-  //   }).then(function (dbExample) {
-  //     res.json(dbExample);
-  //   });
-  // });
+  app.delete("/api/employee/:id", function (req, res) {
+    console.log(":PPPPPPPPPPPPPPPPPPPPPPGGGGGGGGGGGGGg")
+
+    db.Employee.destroy({
+      where: {
+        id: req.params.id
+      }
+    }).then(function (dbEmployee) {
+      console.log(":OOOOOOOOOOOOOOOOOOOOOOOO")
+      res.json(dbEmployee);
+    });
+  });
 
   // API Routes for face recognition
   // API route for getting user's face model
@@ -164,19 +153,6 @@ module.exports = function(app) {
       // Send back data contained within employee's image
       res.send(data.employeeImage);
     });
-    // Previous Code
-    // fs.readFile(path.join(__dirname, "../faceDB/facedb.txt"), "utf8", function(
-    //   err,
-    //   data
-    // ) {
-    //   if (err) {
-    //     throw err;
-    //   }
-    //   // Print and return to user
-    //   var faceToMatch = data;
-    //   console.log(faceToMatch);
-    //   res.send(faceToMatch);
-    // });
   });
 
   // Create a new face
@@ -199,16 +175,6 @@ module.exports = function(app) {
       res.sendStatus(500);
     });
 
-    // Previous code
-    // fs.writeFile("faceDB/facedb.txt", JSON.stringify(facialModel), function(
-    //   error
-    // ) {
-    //   if (error) throw res.sendStatus(500);
-    //   console.log("File save");
-    // });
-    // // Send completed connection status
-    // res.sendStatus(200);
-
-
   });
+
 };

@@ -16,7 +16,7 @@ $(document).ready(function() {
       employerCompanyName: employerCompanyName.val().trim(),
       employerPassword: employerPassword.val().trim()
     };
-
+ 
     if (!employerData.employerEmail || !employerData.employerPassword) {
       return;
     }
@@ -27,12 +27,13 @@ $(document).ready(function() {
     employerPassword.val("");
     employerName.val("");
     employerCompanyName.val("");
+    inputConfirmPassword.val("");
   });
 
   // Does a post to the signup route. If successful, we are redirected to the members page
   // Otherwise we log any errors
   function signUpUser(employerData) {
-    $.post("/api/register", {
+    $.post("/api/signup", {
       employerEmail: employerData.employerEmail,
       employerPassword: employerData.employerPassword,
       employerName: employerData.employerName,
@@ -40,10 +41,8 @@ $(document).ready(function() {
     })
       .then(function(data) {
         if (data) {
-          console.log("_)))))))))))))))))))))))((((((&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", data)
-
-          window.location.replace("/login");
-        }else{
+          window.location.replace("/employer/login");
+        } else {
           $("#emailtaken").removeClass("invisible");
         }
       })
