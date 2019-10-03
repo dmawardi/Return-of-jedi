@@ -3,14 +3,17 @@ var bcrypt = require("bcrypt");
 var passport = require("../config/passport");
 var fs = require('fs');
 const saltRounds = 10;
+
 module.exports = function (app) {
   /*-------------------INDEX PAGE------------------------*/
   app.post("/api/login", passport.authenticate("local"), function (req, res) {
     res.json(req.user);
   });
+
   /*------------------EMPLOYER PAGES--------------------*/
   // Register a new employer
   app.post("/api/signup", (req, res) => {
+    console.log("test");
     db.Employer.findOne({
       where: {
         employerEmail: req.body.employerEmail
@@ -50,9 +53,11 @@ module.exports = function (app) {
       });
     }
   });
+
   /*------------------ADD EMPLOYEE PAGES--------------------*/
   app.post("/api/addEmployee", (req, res) => {
     console.log("POST ENTER SUCCESSFUL", req.body.EmployerId)
+
     db.Employee.create({
       employeeName: req.body.employeeName,
       employeeDepartment: req.body.employeeDepartment,
@@ -63,16 +68,16 @@ module.exports = function (app) {
       employeeImage: req.body.employeeImage,
       EmployerId: req.body.EmployerId
     }).then(function (dbEmployee) {
-      console.log("MMMMMMMMMMMMMMMMMBBBBBBBBBBBBBBBBBB", dbEmployee)
       res.json(dbEmployee)
     }).catch((function (err) {
       res.status(401).json(err);
     }));
+
   });
+
   // PUT route for updating posts
   app.put("/api/update/:id", function (req, res) {
-    console.log("AT THE UPDATE EMPLOYE", req.params.id)
-    console.log("=====================", req.body)
+
     db.Employee.update({
       employeeName: req.body.employeeName,
       employeeDepartment: req.body.employeeDepartment,
@@ -85,23 +90,26 @@ module.exports = function (app) {
       res.json(dbEmployee);
     });
   });
-  app.get("/api/employees", function (req, res) {
+
+
+  app.get("/api/employees/:id", function (req, res) {
+    db.Employee.findAll({
+
+      where: {
+
+        EmployerId: req.params.id
+      }
+
+    }).then(function (dbEmployees) {
+      res.json(dbEmployees);
+    });
+  });
+
+  app.get("/api/allEmployee", function (req, res) {
     db.Employee.findAll({}).then(function (dbEmployees) {
       res.json(dbEmployees);
     });
   });
-  // app.post("/api/employees", function(req, res) {
-  //   db.Employee.create({
-  //     employeeName: req.body.employeeName,
-  //     employeeDepartment: req.body.employeeDepartment,
-  //     employeePosition: req.body.employeePosition,
-  //     employeeAddress: req.body.employeeAddress,
-  //     employeeContactNumber: req.body.employeeContactNumber,
-  //     employeeDOB: req.body.employeeDOB,
-  //     employeeImage: req.body.employeeImage
-  //   })
-  //   res.status(204).end();
-  // });
   app.get("/api/timesheet", function (req, res) {
     db.Timesheet.findAll({}).then(function (results) {
       res.json(results);
@@ -122,18 +130,18 @@ module.exports = function (app) {
     req.logout();
     res.redirect("/");
   });
+
   // Delete an example by id
   app.delete("/api/employee/:id", function (req, res) {
-    console.log(":PPPPPPPPPPPPPPPPPPPPPPGGGGGGGGGGGGGg")
     db.Employee.destroy({
       where: {
         id: req.params.id
       }
     }).then(function (dbEmployee) {
-      console.log(":OOOOOOOOOOOOOOOOOOOOOOOO")
       res.json(dbEmployee);
     });
   });
+
   // API Routes for face recognition
   // API route for getting user's face model
   app.get("/api/getFaceData/:id", function (req, res) {
@@ -151,19 +159,6 @@ module.exports = function (app) {
       // Send back data contained within employee's image
       res.send(data.employeeImage);
     });
-    // Previous Code
-    // fs.readFile(path.join(__dirname, "../faceDB/facedb.txt"), "utf8", function(
-    //   err,
-    //   data
-    // ) {
-    //   if (err) {
-    //     throw err;
-    //   }
-    //   // Print and return to user
-    //   var faceToMatch = data;
-    //   console.log(faceToMatch);
-    //   res.send(faceToMatch);
-    // });
   });
   // Create a new face
   app.post("/api/addNewFace/:id", function (req, res) {
@@ -183,14 +178,6 @@ module.exports = function (app) {
       res.sendStatus(500);
     });
 
-    // Previous code
-    // fs.writeFile("faceDB/facedb.txt", JSON.stringify(facialModel), function(
-    //   error
-    // ) {
-    //   if (error) throw res.sendStatus(500);
-    //   console.log("File save");
-    // });
-    // // Send completed connection status
-    // res.sendStatus(200);
   });
+
 };

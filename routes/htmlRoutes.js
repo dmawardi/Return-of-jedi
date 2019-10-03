@@ -1,102 +1,71 @@
-// Requiring path to so we can use relative routes to our HTML files
-var path = require("path");
 var db = require("../models");
-
 
 // Requiring our custom middleware for checking if a user is logged in
 var isAuthenticated = require("../config/middleware/isAuthenticated");
 
 module.exports = function (app) {
-
-  app.get("/#register", function (req, res) {
-    // If the user already has an account send them to the members page
-    // if (req.user) {
-    res.render("index");
-    // }
-    // res.sendFile(path.join(__dirname, "../public/signup.html"));
-  });
-
   app.get("/", function (req, res) {
     res.render("index");
-    // If the user already has an account send them to the members page
-    // if (req.user) {
-    // res.render("login");
-
-    // }
-    // res.sendFile(path.join(__dirname, "../public/login.html"));
   });
 
-  app.get("/webcam", function (req, res) {
-    db.Example.findAll({}).then(function (dbExamples) {
-      res.render("webCamCapture", {
-        msg: "Welcome!",
-        examples: dbExamples
-      });
-    });
-  });
+  // app.get("/employer/signup", function (req, res) {
+  //   res.render("index");
+  // });
 
-  // Load register page
-  app.get("/register", function (req, res) {
-    // If the user already has an account send them to the dashboard page
-    if (req.user) {
-      res.redirect("/dashboard");
-    }
-    res.sendFile(path.join(__dirname, "../public/register"));
-    // db.Example.findAll({}).then(function(dbExamples) {
-    //   res.render("register", {
-    //     msg: "Welcome!",
-    //     examples: dbExamples
-    //   });
-    // });
-  });
-
-  // Load register page
-  app.get("/login", function (req, res) {
+  // Load dashboard if user already loged in otherwise the login page
+  app.get("/employer/login", function (req, res) {
     // If the user already has an account send them to the members page
     if (req.user) {
-      res.redirect("/members");
+      res.render("employer/dashboard");
     }
-    res.sendFile(path.join(__dirname, "../public/login.html"));
-
-    // db.Example.findAll({}).then(function(dbExamples) {
-    //   res.render("login", {
-    //     msg: "Welcome!",
-    //     examples: dbExamples
-    //   });
-    // });
+    res.render("/")
   });
 
   // Here we've add our isAuthenticated middleware to this route.
   // If a user who is not logged in tries to access this route they will be redirected to the signup page
-  app.get("/dashboard", function (req, res) {
-    db.Employee.findAll({}).then(function (results) {
-      console.log(req.results);
-      res.render("dashboard", {
-        msg: "Data",
-        employeedata: results
-      });
+  app.get("/employer/dashboard", isAuthenticated, function (req, res) {
+    res.render("employer/dashboard", {
+      isAuthenticated: true
     });
   });
+
+  app.get("/employer/addEmployee", isAuthenticated, function (req, res) {
+    res.render("employer/addEmployee", {
+      isAuthenticated: true
+    });
+  });
+
+  // Here we've add our isAuthenticated middleware to this route.
+  // If a user who is not logged in tries to access this route they will be redirected to the signup page
+  // app.get("/dashboard", function (req, res) {
+  //   db.Employee.findAll({}).then(function (results) {
+  //     console.log(req.results);
+  //     res.render("dashboard", {
+  //       msg: "Data",
+  //       employeedata: results
+  //     });
+  //   });
+  // Route for logging user out
+  app.get("/employer/logout", function (req, res) {
+    req.logout();
+    res.redirect("/");
+  });
+
+  /*-------------------------------employee----------------------------------*/
 
   // Face Recognition Pages
   // Load webcam page
-  app.get("/webcam", function (req, res) {
-    db.Example.findAll({}).then(function (dbExamples) {
-      res.render("webCamCapture", {
-        msg: "Welcome!",
-        examples: dbExamples
-      });
-    });
+  app.get("/employees/dashboard", function (req, res) {
+    res.render("employees/dashboard");
+  });
+
+  app.get("/employees/webcam", function (req, res) {
+    res.render("employees/webCamCapture");
   });
 
   // Load checkin page
-  app.get("/checkin", function (req, res) {
-    db.Example.findAll({}).then(function (dbExamples) {
-      res.render("webCamCheckIn", {
-        msg: "Welcome!",
-        examples: dbExamples
-      });
-    });
+  app.get("/employees/checkin", function (req, res) {
+    res.render("employees/webCamCheckIn");
   });
 
   // Render 404 page for any unmatched routes

@@ -3,13 +3,12 @@
     <ul class="nav nav-justified">
       <li class="active"><a href="/">Home</a></li>
       {{#if isAuthenticated}}
-        <li><a href="/dashboard">Dashboard</a></li>
-        <li><a href="/logout">Logout</a></li>
+        <li><a href="/employer/dashboard">Dashboard</a></li>
+        <li><a href="/employer/addEmployee">Add Employee</a></li>
+        <li><a href="/employer/logout">Logout</a></li>
       {{else}}
-        <li><a href="/">Sign Up</a></li>
-        <li><a href="/login">Sign In</a></li>
-        <li><a href="/checkin">Check In</a></li>
-        <li><a href="/webcam">webcam</a></li>
+        <li><a href="/employer/signup">Sign Up</a></li>
+        <li><a href="/employer/login">Sign In</a></li>
       {{/if}}
     </ul>
   </nav>

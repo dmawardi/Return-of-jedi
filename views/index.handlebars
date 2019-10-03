@@ -26,19 +26,19 @@
     <!-- Login -->
     <article id="login">
       <h2 class="major">Login</h2>
-      <form method="post" class="login">
+      <form class="login">
         <div class="fields">
           <div class="field">
-            <label for="employerEmail">Email address</label>
-            <input type="email" class="form-control" id="employerEmail" placeholder="Email">
+            <label for="employerLoginEmail">Email address</label>
+            <input type="email" class="form-control" id="employerLoginEmail" placeholder="Email">
           </div>
           <div class="field">
-            <label for="employerPassword">Password</label>
-            <input type="password" class="form-control" id="employerPassword" placeholder="Password">
+            <label for="employerLoginPassword">Password</label>
+            <input type="password" class="form-control" id="employerLoginPassword" placeholder="Password">
           </div>
         </div>
         <ul class="actions">
-          <li><input type="submit" value="Login" class="primary" /></li>
+          <li><input type="submit" value="Login" class="primary" id="loginbutton" /></li>
         </ul>
       </form>
       <div id="loginAlert" class="alert alert-danger invisible" role="alert">
@@ -50,7 +50,7 @@
     <!-- Register -->
     <article id="register">
       <h2 class="major">Register</h2>
-      <form method="post" class="form-signin"
+      <form class="form-signin"
         oninput='confirmationPassword.setCustomValidity(confirmationPassword.value != employerPassword.value ? "Passwords do not match." : "")'>
         <div class="fields">
           <div class="field half">
