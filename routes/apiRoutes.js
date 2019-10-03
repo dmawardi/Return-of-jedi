@@ -1,35 +1,25 @@
 var db = require("../models");
-var bcrypt = require('bcrypt');
+var bcrypt = require("bcrypt");
 var passport = require("../config/passport");
 var fs = require('fs');
 const saltRounds = 10;
 
-module.exports = function (app) {
-
+module.exports = function(app) {
+  /*-------------------INDEX PAGE------------------------*/
   app.post("/api/login", passport.authenticate("local"), function(req, res) {
     res.json(req.user);
   });
 
-
-  // app.post("/api/login", function(req, res) {
-  //   res.json(req.user);
-  // });
-  // Get all examples
-  // app.get("/api/examples", function (req, res) {
-  //   db.Example.findAll({}).then(function (dbExamples) {
-  //     res.json(dbExamples);
-  //   });
-  // });
-
+  /*------------------EMPLOYER PAGES--------------------*/
   // Register a new employer
-  app.post("/api/register", (req, res) => {
-    
-    db.Employer.findOne({where: {employerEmail: req.body.employerEmail}})
-    .then(function (employer) {
+  app.post("/api/signup", (req, res) => {
+    db.Employer.findOne({
+      where: { employerEmail: req.body.employerEmail }
+    }).then(function(employer) {
       if (employer) {
-        res.send(false)
+        res.send(false);
       } else {
-        bcrypt.hash(req.body.employerPassword, saltRounds, function (err, hash) {
+        bcrypt.hash(req.body.employerPassword, saltRounds, function(err, hash) {
           db.Employer.create({
             employerEmail: req.body.employerEmail,
             employerName: req.body.employerName,
@@ -42,7 +32,6 @@ module.exports = function (app) {
           }));
         });
       }
-
     });
   });
   
@@ -61,8 +50,78 @@ module.exports = function (app) {
     }
   });
 
+
+
+
+
+
+  /*------------------ADD EMPLOYEE PAGES--------------------*/
+  app.post("/api/addEmployee", (req, res) => {
+    console.log("POST ENTER SUCCESSFUL", req.body.EmployerId)
+
+    db.Employee.create({
+      employeeName: req.body.employeeName,
+      employeeDepartment: req.body.employeeDepartment,
+      employeePosition: req.body.employeePosition,
+      employeeAddress: req.body.employeeAddress,
+      employeeContactNumber: req.body.employeeContactNumber,
+      employeeDOB: req.body.employeeDOB,
+      employeeImage: req.body.employeeImage,
+      EmployerId: req.body.EmployerId
+    }).then(function (dbEmployee) {
+      console.log("MMMMMMMMMMMMMMMMMBBBBBBBBBBBBBBBBBB", dbEmployee)
+      res.json(dbEmployee)  
+    }).catch((function (err) {
+      res.status(401).json(err);
+    }));
+
+  });
+
+
+
+
+
+
+  app.get("/api/employees", function(req, res) {
+    db.Employee.findAll({}).then(function(results) {
+      res.json(results);
+    });
+  });
+
+  app.post("/api/employees", function(req, res) {
+    db.Employee.create({
+      employeeName: req.body.employeeName,
+      employeeDepartment: req.body.employeeDepartment,
+      employeePosition: req.body.employeePosition,
+      employeeAddress: req.body.employeeAddress,
+      employeeContactNumber: req.body.employeeContactNumber,
+      employeeDOB: req.body.employeeDOB,
+      employeeImage: req.body.employeeImage
+    });
+
+    res.status(204).end();
+  });
+
+  app.get("/api/timesheet", function(req, res) {
+    db.Timesheet.findAll({}).then(function(results) {
+      res.json(results);
+    });
+  });
+
+  app.post("/api/timesheet", function(req, res) {
+    db.Timesheet.create({
+      employeeID: req.body.employeeID,
+      employeeStatus: req.body.employeeStatus,
+      geoLocation: req.body.geoLocation,
+      check_in: req.body.check_in,
+      check_out: req.body.check_out
+    });
+
+    res.status(204).end();
+  });
+
   // Route for logging user out
-  app.get("/logout", function (req, res) {
+  app.get("/logout", function(req, res) {
     req.logout();
     res.redirect("/");
   });
@@ -80,36 +139,69 @@ module.exports = function (app) {
 
   // API Routes for face recognition
   // API route for getting user's face model
-  app.get("/api/getCompanyFaceData", function(req, res) {
+  app.get("/api/getFaceData/:id", function(req, res) {
+    // Grab ID of user
+    var idOfUser = req.params.id;
     var fs = require("fs");
     var path = require("path");
     console.log("reading file");
     // Read data file
 
-    // Grab user's data
-    fs.readFile(path.join(__dirname, "../faceDB/facedb.txt"), 'utf8', function (err, data) {
-      if (err) {
-        throw err;
-      }
-      // Print and return to user
-      var faceToMatch = data;
-      console.log(faceToMatch);
-      res.send(faceToMatch);
-    });
 
+    db.Employee.findOne({
+      where: {
+        id: idOfUser
+      }
+    }).then(function(data) {
+      // Send back data contained within employee's image
+      res.send(data.employeeImage);
+    });
+    // Previous Code
+    // fs.readFile(path.join(__dirname, "../faceDB/facedb.txt"), "utf8", function(
+    //   err,
+    //   data
+    // ) {
+    //   if (err) {
+    //     throw err;
+    //   }
+    //   // Print and return to user
+    //   var faceToMatch = data;
+    //   console.log(faceToMatch);
+    //   res.send(faceToMatch);
+    // });
   });
 
   // Create a new face
-  app.post("/api/addNewFace", function(req, res) {
+  app.post("/api/addNewFace/:id", function(req, res) {
     // Assign request body to facialModel
+    var idOfUser = req.params.id;
     var facialModel = req.body;
     // Insert facial model into database
-    fs.writeFile("faceDB/facedb.txt", JSON.stringify(facialModel), function(error) {
-      if (error) throw res.sendStatus(500);
-      console.log("File save");
+    db.Employee.update(
+      {
+        id: idOfUser
+      },
+      {
+      employeeImage: JSON.stringify(facialModel)
+    }).then(function(){
+      // Send status 200
+      res.sendStatus(200);
+    }).catch(function(){
+      // Send status 500
+      res.sendStatus(500);
     });
-    // Send completed connection status
-    res.sendStatus(200);
+  
+    // Previous code
+    // fs.writeFile("faceDB/facedb.txt", JSON.stringify(facialModel), function(
+    //   error
+    // ) {
+    //   if (error) throw res.sendStatus(500);
+    //   console.log("File save");
+    // });
+    // // Send completed connection status
+    // res.sendStatus(200);
+
+
   });
 
 };

@@ -72,6 +72,10 @@ $('#video').on('play', function () {
         var resizedDetections = await faceapi.resizeResults(detections, displaySize);
         // Sync up canvas with context and clear detection rectangles
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+        // Get video position and match canvas
+        var videoPosition = video.getBoundingClientRect();
+        canvas.style.top = videoPosition.y + "px";
+        canvas.style.left = videoPosition.x + "px";
         // draw boxes around faces
         faceapi.draw.drawDetections(canvas, resizedDetections);
         // Draw landmarks on face
@@ -89,10 +93,13 @@ $('#sendModelButton').on('click', function () {
     // Use labeledFaceDescriptors to create 
     var faceObject = new faceapi.LabeledFaceDescriptors("Bill", descriptor32formatter(faceToStore.descriptor));
 
+    // Assign below variable to user ID for API post call
+    var idOfUser;
+    
     // Make a post request to the server with all the new face descriptors
     $.ajax({
         method: 'POST',
-        url: 'api/addNewFace',
+        url: 'api/addNewFace/'+idOfUser,
         data: JSON.stringify(faceObject),
         headers: {
             'Content-Type': 'application/json',

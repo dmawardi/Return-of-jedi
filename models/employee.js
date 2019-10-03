@@ -14,16 +14,19 @@ module.exports = function(sequelize, DataTypes) {
         len: [1]
       }
     },
-    comployeePosition: {
+    employeePosition: {
       type: DataTypes.STRING
     },
-    comployeeAddress: {
+    employeeAddress: {
       type: DataTypes.STRING
     },
     employeeContactNumber: {
       type: DataTypes.STRING
     },
     employeeDOB: {
+      type: DataTypes.STRING
+    },
+    employeeImage: {
       type: DataTypes.STRING
     }
   });

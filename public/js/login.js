@@ -30,7 +30,7 @@ $(document).ready(function() {
     })
       .then(function(data) {
         if (data) {
-          window.location.replace("/dashboard");
+          window.location.replace("/employer/dashboard");
         } else {
           $("#loginAlert").removeClass("invisible");
         }

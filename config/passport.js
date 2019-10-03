@@ -35,7 +35,7 @@ passport.use(
           });
         }
         // If none of the above, return the user
-        console.log('SUCCESSFULLY AUTHENTICATED', dbEmployer)
+        console.log('SUCCESSFULLY AUTHENTICATED')
         return done(null, dbEmployer);
       });
     }

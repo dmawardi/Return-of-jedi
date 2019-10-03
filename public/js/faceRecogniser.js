@@ -16,7 +16,7 @@ function buildFaceMatchLibrary() {
                 // Build labeled Descriptors and store
                 var labeledDescriptors = buildLabeledDescriptors(data);
                 // Init facematcher with descriptors
-                var faceMatcher = new faceapi.FaceMatcher([labeledDescriptors], 0.5);
+                var faceMatcher = new faceapi.FaceMatcher([labeledDescriptors], 0.6);
 
                 // Resolve promise with facematched data
                 resolve(faceMatcher);
@@ -106,6 +106,12 @@ $('#video').on('play', function () {
             var resizedDetections = await faceapi.resizeResults(detections, displaySize);
             // Sync up canvas with context and clear detection rectangles
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            // Get video position and match canvas
+            var videoPosition = video.getBoundingClientRect();
+            canvas.style.top = videoPosition.y + "px";
+            canvas.style.left = videoPosition.x + "px";
+
+
             // draw boxes around faces
             faceapi.draw.drawDetections(canvas, resizedDetections);
             // Draw landmarks on face
@@ -125,9 +131,10 @@ $('#video').on('play', function () {
                 var labelFound = results.toString().split(" ")[0];
                 // Grab Euclidean threshold to check
                 var eucThresh = results[0]._distance;
+                console.log(eucThresh);
 
                 // If found to match original data to match, grant match
-                if (eucThresh < 0.6) {
+                if (eucThresh < 0.4) {
                     console.log("match found!: " + labelFound);
                     // Stop facial scanning (stop interval)
                     clearInterval(intervalID);
