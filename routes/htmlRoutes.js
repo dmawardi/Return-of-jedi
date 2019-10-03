@@ -6,19 +6,18 @@ var db = require("../models");
 // Requiring our custom middleware for checking if a user is logged in
 var isAuthenticated = require("../config/middleware/isAuthenticated");
 
-module.exports = function(app) {
+module.exports = function (app) {
 
-  app.get("/", function(req, res) {
+  app.get("/#register", function (req, res) {
     // If the user already has an account send them to the members page
     // if (req.user) {
-      res.render("signup");
+    res.render("index");
     // }
     // res.sendFile(path.join(__dirname, "../public/signup.html"));
   });
 
-
-  app.get("/login", function(req, res) {
-    res.render("login");
+  app.get("/", function (req, res) {
+    res.render("index");
     // If the user already has an account send them to the members page
     // if (req.user) {
     // res.render("login");
@@ -69,8 +68,14 @@ module.exports = function(app) {
 
   // Here we've add our isAuthenticated middleware to this route.
   // If a user who is not logged in tries to access this route they will be redirected to the signup page
-  app.get("/dashboard", /* isAuthenticated,*/ function(req, res) {
-    res.render("dashboard");
+  app.get("/dashboard", function (req, res) {
+    db.Employee.findAll({}).then(function (results) {
+      console.log(req.results);
+      res.render("dashboard", {
+        msg: "Data",
+        employeedata: results
+      });
+    });
   });
 
   // Face Recognition Pages
@@ -98,5 +103,4 @@ module.exports = function(app) {
   app.get("*", function (req, res) {
     res.render("404");
   });
-
 };

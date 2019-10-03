@@ -1,13 +1,110 @@
-</nav>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6 col-md-offset-3">
-        <h2>Welcome <span class="employer-name"></span></h2>
+<div id="wrapper">
+
+  <!-- Header -->
+  <header id="header">
+    <div class="logo">
+      <span class="icon fa-gem"></span>
+    </div>
+    <div class="content">
+      <div class="inner">
+        <h1 class="employer-name"></h1>
       </div>
     </div>
+    <nav>
+      <ul>
+        <li><a href="#addnew">Add New</a></li>
+        <li><a href="#">Link</a></li>
+        <li><button onclick="exportTableToCSV('members.csv')">Export</button></li>
+      </ul>
+    </nav>
+    <table id="example" class="table" style="width:100%">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Status</th>
+          <th scope="col">Hrs/pw</th>
+          <th scope="col">Edit</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each employeedata}}
+        <tr>
+          <th scope="row">{{this.id}}</th>
+          <td>{{this.employeeName}}</td>
+          <td>{{this.id}}</td>
+          <td>{{this.id}}</td>
+          <td><i class="fas fa-edit"></i></td>
+          <td><i class="fas fa-trash-alt"></i></td>
+        </tr>
+        {{/each}}
+
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Status</th>
+          <th scope="col">Hrs/pw</th>
+          <th scope="col">Edit</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </tfoot>
+    </table>
+  </header>
+
+  <!-- Main -->
+  <div id="main">
+
+    <!-- Login -->
+    <article id="addnew">
+      <h2 class="major">Add New Employee</h2>
+      <form method="post" action="#">
+        <div class="fields">
+          <div class="field half">
+            <label for="cname">Name</label>
+            <input type="text" name="cname" id="cname" />
+          </div>
+          <div class="field half">
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" />
+          </div>
+          <div class="field half">
+            <label for="department">Department</label>
+            <input type="text" name="department" id="department" />
+          </div>
+          <div class="field half">
+            <label for="position">Position</label>
+            <input type="text" name="position" id="position" />
+          </div>
+          <div class="field half">
+            <label for="contact-number">Contact Number</label>
+            <input type="text" name="contact-number" id="contact-number" />
+          </div>
+          <div class="field half">
+            <label for="dob">DOB</label>
+            <input type="text" name="dob" id="dob" />
+          </div>
+          <div class="field">
+            <label for="address">Address</label>
+            <input type="text" name="address" id="address" />
+          </div>
+        </div>
+        <ul class="actions">
+          <li><input type="submit" value="Register" class="primary" /></li>
+          <li><input type="reset" value="Reset" /></li>
+        </ul>
+      </form>
+    </article>
+
   </div>
 
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- Footer -->
+  <footer id="footer">
+    <p class="copyright">&copy; Untitled. Design: <a href="#">JEDI</a>.</p>
+  </footer>
 
+</div>
 
 <script src="/js/dashboard.js"></script>

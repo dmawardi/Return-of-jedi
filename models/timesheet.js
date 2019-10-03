@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   var TimeSheet = sequelize.define("TimeSheet", {
     employeeStatus: {
       type: DataTypes.DATE,
@@ -15,15 +15,15 @@ module.exports = function(sequelize, DataTypes) {
       type: "TIMESTAMP",
       //   defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
       allowNull: false
-    },
-    check_out: {
-      type: "TIMESTAMP",
-      //   defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
-      allowNull: false
     }
+    // check_out: {
+    //   type: "TIMESTAMP",
+    //   //   defaultValue: DataTypes.literal("CURRENT_TIMESTAMP"),
+    //   allowNull: false
+    // }
   });
 
-  TimeSheet.associate = function(models) {
+  TimeSheet.associate = function (models) {
     // We're saying that a Post should belong to an Author
     // A Post can't be created without an Author due to the foreign key constraint
     TimeSheet.belongsTo(models.Employee, {

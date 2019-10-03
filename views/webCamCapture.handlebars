@@ -1,31 +1,40 @@
-<div id="home">
-  <div class="container">
-    <div class="row">
-      <div class="col-8 offset-2">
-        <h1>{{msg}}</h1>
-        <h2>This is our Capture Page!</h2>
-        {{!-- Video section --}}
-        <div class="container" id="capture">
-          <video id="video" width="720" height="560" autoplay muted></video>
-        </div>
-        <button type="button" class="btn btn-info" id="sendModelButton">Send Model</button>
+<div id="wrapper">
 
-
-
-       
-        <h3>Examples:</h3>
-        <ul id="example-list" class="list-group">
-          {{#each examples}}
-          <li data-id="{{this.id}}" class="list-group-item">
-            <a href="example/{{this.id}}">{{this.text}}</a>
-            <button class="btn btn-danger float-right delete">ｘ</button>
-          </li>
-          {{/each}}
-        </ul>
+  <!-- Header -->
+  <header id="header">
+    <div class="logo">
+      <span class="icon fa-gem"></span>
+    </div>
+    <div class="content">
+      <div class="inner">
+        <h1>Capture Page</h1>
       </div>
     </div>
-  </div>
+    <nav>
+      <ul>
+        <li><button type="button" id="sendModelButton">Send Model</button></li>
+      </ul>
+    </nav>
+    <div class="container" id="capture">
+      <video id="video" width="720" height="560" autoplay muted></video>
+    </div>
+    <ul id="example-list" class="list-group">
+      {{#each examples}}
+      <li data-id="{{this.id}}" class="list-group-item">
+        <a href="example/{{this.id}}">{{this.text}}</a>
+        <button class="btn btn-danger float-right delete">ｘ</button>
+      </li>
+      {{/each}}
+    </ul>
+  </header>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <p class="copyright">&copy; Untitled. Design: <a href="#">JEDI</a>.</p>
+  </footer>
+
 </div>
+
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="/js/index.js"></script>

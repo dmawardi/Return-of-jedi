@@ -1,10 +1,104 @@
-<!-- Jumbotron -->
-     
+<div id="wrapper">
 
-<div class="jumbotron">
-  <h1>Site Authentication! {{msg}}</h1>
-  <p class="lead">Welcome aboard.</p>
+  <!-- Header -->
+  <header id="header">
+    <div class="logo">
+      <span class="icon fa-gem"></span>
+    </div>
+    <div class="content">
+      <div class="inner">
+        <h1>Project Name</h1>
+        <p>A fully responsive site template designed by <a href="https://html5up.net">HTML5 UP</a> and released<br />
+          for free under the <a href="https://html5up.net/license">Creative Commons</a> license.</p>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#login">Login</a></li>
+        <li><a href="#register">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <div id="main">
+
+    <!-- Login -->
+    <article id="login">
+      <h2 class="major">Login</h2>
+      <form method="post" class="login">
+        <div class="fields">
+          <div class="field">
+            <label for="employerEmail">Email address</label>
+            <input type="email" class="form-control" id="employerEmail" placeholder="Email">
+          </div>
+          <div class="field">
+            <label for="employerPassword">Password</label>
+            <input type="password" class="form-control" id="employerPassword" placeholder="Password">
+          </div>
+        </div>
+        <ul class="actions">
+          <li><input type="submit" value="Login" class="primary" /></li>
+        </ul>
+      </form>
+      <div id="loginAlert" class="alert alert-danger invisible" role="alert">
+        Incorrect email or password
+      </div>
+    </article>
+
+
+    <!-- Register -->
+    <article id="register">
+      <h2 class="major">Register</h2>
+      <form method="post" class="form-signin"
+        oninput='confirmationPassword.setCustomValidity(confirmationPassword.value != employerPassword.value ? "Passwords do not match." : "")'>
+        <div class="fields">
+          <div class="field half">
+            <label for="employerName" class="sr-only">Name</label>
+            <input type="text" id="employerName" name="name" class="form-control" placeholder="Name" required>
+          </div>
+          <div class="field half">
+            <label for="employerCompanyName" class="sr-only">Company Name</label>
+            <input type="text" id="employerCompanyName" name="companyname" class="form-control"
+              placeholder="Company name">
+          </div>
+          <div class="field half">
+            <label for="employerEmail" class="sr-only">Email address</label>
+            <input type="email" id="employerEmail" name="email" class="form-control" placeholder="Email address"
+              required autofocus>
+          </div>
+          <div class="field half">
+            <label for="employerPassword" class="sr-only">Password</label>
+            <input type="password" id="employerPassword" name="password" class="form-control" placeholder="Password"
+              required>
+          </div>
+          <div class="field half">
+            <label for="inputConfirmPassword" class="sr-only">Confirm Password</label>
+            <input type="password" id="inputConfirmPassword" name="confirmationPassword" class="form-control"
+              placeholder="Confirm Password" required>
+
+          </div>
+        </div>
+        <ul class="actions">
+          <li><input type="submit" value="Register" class="primary" id="signup" /></li>
+        </ul>
+      </form>
+      <div id="emailtaken" class="alert alert-danger invisible" role="alert">
+        The email is already taken!
+      </div>
+    </article>
+
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <p class="copyright">&copy; Untitled. Design: <a href="#">JEDI</a>.</p>
+  </footer>
+
 </div>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{{!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> --}}
 <script src="/js/index.js"></script>
+<script src="/js/login.js"></script>
+<script src="/js/signup.js"></script>
