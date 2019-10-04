@@ -3,6 +3,7 @@ var video = document.querySelector('video');
 var storeFace;
 var webcamStream;
 var userFace;
+var idOfUser = window.location.href.split("=")[1];
 
 // Build facematch library from api data and init using FaceMatcher
 function buildFaceMatchLibrary() {
@@ -10,7 +11,7 @@ function buildFaceMatchLibrary() {
     return new Promise(function (resolve, reject) {
         try {
             // Place call to grab face model data
-            $.get('/api/getCompanyFaceData', function (data) {
+            $.get('/api/getFaceData/' + idOfUser, function (data) {
                 console.log('Received Data: ' + data);
 
                 // Build labeled Descriptors and store
@@ -46,6 +47,7 @@ function revertStringifiedArray(arrayDict) {
 // Parses JSON data and builds Labeled Descriptors
 function buildLabeledDescriptors(data) {
     // Parse data as JSON
+    console.log(data);
     userFace = JSON.parse(data);
 
     // // Build user descriptor as float 32 array
@@ -136,8 +138,19 @@ $('#video').on('play', function () {
                 // If found to match original data to match, grant match
                 if (eucThresh < 0.4) {
                     console.log("match found!: " + labelFound);
+                    $('.inner h1').text('Match Found');
                     // Stop facial scanning (stop interval)
                     clearInterval(intervalID);
+
+                    
+
+                    // TODO Modal displaying "You have been checked in. Redirecting..."
+
+                    setTimeout(function () {
+                            // TODO Clock user into the system as check in or check out depending on current status
+                            window.location.replace("/employee/dashboard");
+                        },
+                        4000);
 
                     // Sync up canvas with context and clear detection rectangles
                     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);

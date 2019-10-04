@@ -152,6 +152,7 @@ module.exports = function (app) {
     console.log("reading file");
     // Read data file
     db.Employee.findOne({
+      // Where clause
       where: {
         id: idOfUser
       }
@@ -165,12 +166,14 @@ module.exports = function (app) {
     // Assign request body to facialModel
     var idOfUser = req.params.id;
     var facialModel = req.body;
+    console.log("Attempting database write");
     // Insert facial model into database
     db.Employee.update({
-      id: idOfUser
-    }, {
       employeeImage: JSON.stringify(facialModel)
-    }).then(function () {
+    },{
+      where: {
+      id: idOfUser
+    }}).then(function () {
       // Send status 200
       res.sendStatus(200);
     }).catch(function () {

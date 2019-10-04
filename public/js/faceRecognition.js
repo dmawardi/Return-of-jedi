@@ -3,6 +3,9 @@ var video = document.querySelector('video');
 var storeFace;
 var webcamStream;
 
+// Grab the id from the URL
+console.log(window.location.href.split("=")[1]);
+
 // Convert descriptor to float32 format required for face-api
 function descriptor32formatter(descriptor) {
     // Convert to Float32 array and put in brackets
@@ -93,13 +96,14 @@ $('#sendModelButton').on('click', function () {
     // Use labeledFaceDescriptors to create 
     var faceObject = new faceapi.LabeledFaceDescriptors("Bill", descriptor32formatter(faceToStore.descriptor));
 
-    // Assign below variable to user ID for API post call
-    var idOfUser;
+    // Assign below variable from URL parameter to user ID for API post call
+    var idOfUser = window.location.href.split("=")[1];
+    console.log(idOfUser);
     
     // Make a post request to the server with all the new face descriptors
     $.ajax({
         method: 'POST',
-        url: 'api/addNewFace/'+idOfUser,
+        url: '/api/addNewFace/'+idOfUser,
         data: JSON.stringify(faceObject),
         headers: {
             'Content-Type': 'application/json',
