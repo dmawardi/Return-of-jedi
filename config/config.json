@@ -1,11 +1,11 @@
 {
   "development": {
-    "username": "root",
-    "password": "root",
-    "database": "exampledb",
-    "host": "127.0.0.1",
+    "username": "o63f4ozkisf9xzel",
+    "password": "zozlt3c4syorbwtk",
+    "database": "nvrzf1govlft736b",
+    "host": "m7wltxurw8d2n21q.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     "dialect": "mysql",
-    "port": 8889
+    "port": 3306
   },
   "test": {
     "username": "root",

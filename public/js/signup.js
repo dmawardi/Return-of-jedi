@@ -8,7 +8,7 @@ $(document).ready(function () {
 
   // When the signup button is clicked, we validate the email and password are not blank
   signUpForm.on("submit", function (event) {
-    alert("you clic");
+    //alert("you clic");
     event.preventDefault();
     var employerData = {
       employerEmail: employerEmail.val().trim(),
