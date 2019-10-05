@@ -99,7 +99,7 @@ $('#sendModelButton').on('click', function () {
         // TODO Clock user into the system as check in or check out depending on current status
         window.location.replace("/employees/dashboard");
       },
-      4000);
+      2000);
   })
 });
 // Arguments

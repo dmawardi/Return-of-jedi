@@ -148,9 +148,9 @@ $('#video').on('play', function () {
 
                     setTimeout(function () {
                             // TODO Clock user into the system as check in or check out depending on current status
-                            window.location.replace("/employee/dashboard");
+                            window.location.replace("/employees/dashboard");
                         },
-                        4000);
+                        2000);
 
                     // Sync up canvas with context and clear detection rectangles
                     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
