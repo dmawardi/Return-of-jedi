@@ -66,7 +66,7 @@ $(document).ready(function () {
       .find(".row_data")
       .attr("contenteditable", "true")
       .attr("edit_type", "button")
-      .addClass("bg-warning")
+      .addClass("bg-secondary")
       .css("padding", "3px");
 
     tbl_row.find(".row_data").each(function (index, val) {
@@ -137,7 +137,7 @@ $(document).ready(function () {
     tbl_row
       .find(".row_data")
       .attr("edit_type", "click")
-      .removeClass("bg-warning")
+      .removeClass("bg-secondary")
       .css("padding", "");
 
     //--->get row data > start
