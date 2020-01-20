@@ -3,6 +3,9 @@ CheckIn CheckIn is a website that will aim to provide a SAAS for businesses to m
 
 How does it work: An organization can establish an account with us which will allow them to setup employees in a database with a face profile. The employees can then check in and out of work using facial recognition. We will serve as a data-capture software and allow employers to use this information for analytical purposes. The user experience will be designed in a way where once an employee has completed initial setup, coming in and out of work everyday should be seamless.
 
+## Deployment
+[Return of JEDI](https://return-of-the-jedi.herokuapp.com/)
+
 ## Employer Pages (Wireframes)
 Initial planning for this project is visualized in the following diagram where and Employer have two options
                 
